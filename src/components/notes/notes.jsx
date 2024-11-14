@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import Navbar from './Navbar';
+import Navbar from '../Navbar';
+import { FaSearch, FaRegBookmark, FaRegThumbsUp, FaDownload } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Notes = () => {
   const [notes] = useState([
@@ -8,14 +10,14 @@ const Notes = () => {
       title: 'Introduction to React',
       tags: ['React', 'JavaScript'],
       author: 'John Doe',
-      thumbnail: '/path/to/thumbnail1.jpg',
+      thumbnail: '../public/react.png',
     },
     {
       id: 2,
       title: 'Machine Learning Basics',
       tags: ['ML', 'AI'],
       author: 'Jane Smith',
-      thumbnail: '/path/to/thumbnail2.jpg',
+      thumbnail: '../public/ml.jpeg',
     },
     // Add more notes here...
   ]);
@@ -30,26 +32,30 @@ const Notes = () => {
   );
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen">
       <Navbar />
       
       <div className="container mx-auto py-16 px-6">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-primary-dark">Notes</h1>
-          <button className="bg-primary-dark text-background px-4 py-2 rounded-md hover:bg-primary transition duration-300">
+         <Link to='/notes/upload'> <button className="bg-primary-dark text-background px-4 py-2 rounded-md hover:bg-primary transition duration-300">
             Upload Note
           </button>
+          </Link>
         </div>
 
         {/* Search and Filter */}
-        <div className="flex justify-between items-center mb-6">
-          <input
-            type="text"
-            placeholder="Search notes..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="border border-primary-light px-4 py-2 rounded-md w-full md:w-1/2"
-          />
+        <div className="flex items-center mb-6">
+          <div className="relative flex items-center border border-primary-light rounded-md w-1/2 md:w-1/3">
+            <FaSearch className="absolute left-3 text-primary-light" />
+            <input
+              type="text"
+              placeholder="Search notes..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 py-2 rounded-md w-full focus:outline-none"
+            />
+          </div>
           <select
             className="ml-4 border border-primary-light px-4 py-2 rounded-md"
             value={filterTag}
@@ -113,11 +119,15 @@ const Notes = () => {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a elementum mi. Duis eget cursus nibh.
               </p>
               <div className="flex items-center space-x-4">
-                <button className="bg-primary-dark text-background px-4 py-2 rounded-md hover:bg-primary transition duration-300">
-                  Download
+                <button className="flex items-center bg-primary-dark text-background px-4 py-2 rounded-md hover:bg-primary transition duration-300">
+                  <FaDownload className="mr-2" /> Download
                 </button>
-                <button className="text-primary hover:text-primary-dark transition duration-300">Like</button>
-                <button className="text-primary hover:text-primary-dark transition duration-300">Bookmark</button>
+                <button className="flex items-center text-primary hover:text-primary-dark transition duration-300">
+                  <FaRegThumbsUp className="mr-1" /> Like
+                </button>
+                <button className="flex items-center text-primary hover:text-primary-dark transition duration-300">
+                  <FaRegBookmark className="mr-1" /> Bookmark
+                </button>
               </div>
             </div>
           </div>

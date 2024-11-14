@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <nav className="bg-primary-dark text-background py-4 shadow-md ">
+    <nav className="bg-gradient-to-r from-primary-light to-primary text-background py-4 shadow-md ">
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/" className="text-3xl font-extrabold text-background px-6">
           StudySync
