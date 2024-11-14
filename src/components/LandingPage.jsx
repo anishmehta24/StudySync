@@ -1,5 +1,7 @@
 // src/components/LandingPage.jsx
 import React, { useEffect, useState } from 'react';
+import { FaCodepen } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -25,9 +27,9 @@ const LandingPage = () => {
     }`}
   >
     <div className="container mx-auto flex items-center justify-between py-4 px-6">
-      <a href="/" className={`text-3xl font-extrabold ${scrolled ? 'text-background' : 'text-primary'}`}>
-        StudySync
-      </a>
+      <Link to="/" className={`text-3xl flex font-extrabold ${scrolled ? 'text-background' : 'text-primary'}`}>
+      <FaCodepen className='mr-3 mt-1'/> StudySync
+      </Link>
       <div>
         <a
           href="/login"

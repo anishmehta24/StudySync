@@ -3,8 +3,8 @@ import React from 'react';
 
 const Signup = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-background to-secondary-light">
+      <div className="w-full max-w-md p-8 bg-gradient-to-r from-background to-secondary-light shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center text-primary">
           Create Your Account
         </h2>

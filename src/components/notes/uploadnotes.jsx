@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
+import { Box, TextField, Typography, Button } from '@mui/material';
+import {  AddTask,  UploadFile,  UploadRounded,} from '@mui/icons-material';
 
 const Uploadnotes = ({ username }) => {
   const navigate = useNavigate();
@@ -25,94 +27,153 @@ const Uploadnotes = ({ username }) => {
     // Upload functionality here...
     console.log(formData);
     alert('Note uploaded successfully!');
-    navigate('/notes'); // Redirect after upload
+    navigate('/notes');// Redirect after upload
   };
 
   return (
     <div>
-        <Navbar/>
+        <div><Navbar/></div>
+        
     <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen flex justify-center items-center p-6">
-      <div className="w-full max-w-md bg-gradient-to-r from-secondary-light to-background rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-semibold text-primary-dark mb-4">Upload Note</h2>
+      <div className="w-full max-w-md bg-gradient-to-r from-background to-secondary-light rounded-lg shadow-lg p-6">
+        <h2 className="text-2xl font-bold text-primary-dark mb-4 text-center tracking-normal">Upload Your Notes <UploadRounded/></h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="title" className="block text-sm font-medium text-text-light">
-              Title *
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              required
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-text-light">
-              Description *
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              required
-              rows="4"
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="tags" className="block text-sm font-medium text-text-light">
-              Tags (comma-separated) *
-            </label>
-            <input
-              type="text"
-              id="tags"
-              name="tags"
-              required
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="image" className="block text-sm font-medium text-text-light">
-              Upload Thumbnail (Optional)
-            </label>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              accept="image/*"
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="document" className="block text-sm font-medium text-text-light">
-              Upload Document (PDF or similar) *
-            </label>
-            <input
-              type="file"
-              id="document"
-              name="document"
-              required
-              accept=".pdf,.doc,.docx"
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <span className="block text-sm text-text-light">
-              Uploaded by: <span className="font-medium">{username}</span>
-            </span>
-          </div>
-          <button
-            type="submit"
-            className="w-full py-2 bg-primary text-background rounded hover:bg-primary-dark transition"
-          >
-            Upload Note
-          </button>
-        </form>
+      <Box mb={2}>
+        {/* <Typography variant="body1" color="textSecondary" component="label" htmlFor="title">
+          Title *
+        </Typography> */}
+        <TextField
+          variant="outlined"
+          label="Title"
+           placeholder="E.g., Quantum Physics, Basics of Calculus"
+          id="title"
+          name="title"
+          required
+          onChange={handleChange}
+          fullWidth
+          size="small"
+          margin="dense"
+        />
+      </Box>
+
+      <Box mb={2}>
+        {/* <Typography variant="body1" color="textSecondary" component="label" htmlFor="description">
+          Description *
+        </Typography> */}
+        <TextField
+          variant="outlined"
+          label="Description"
+          id="description"
+          placeholder="Short Brief About the Notes You are Uploading"
+          name="description"
+          required
+          onChange={handleChange}
+          multiline
+          rows={3}
+          fullWidth
+          size="small"
+          margin="dense"
+        />
+      </Box>
+
+      <Box mb={2}>
+        {/* <Typography variant="body1" color="textSecondary" component="label" htmlFor="tags">
+          Tags (comma-separated) *
+        </Typography> */}
+        <TextField
+          variant="outlined"
+             label="Tags (comma-separated)"
+           placeholder="E.g., Calculus, C++, Python, etc"
+          id="tags"
+          name="tags"
+          required
+          onChange={handleChange}
+          fullWidth
+          size="small"
+          margin="dense"
+        />
+      </Box>
+
+      <Box mb={2}>
+        <Typography variant="body1" color="textSecondary">
+          Upload Thumbnail (Optional)
+        </Typography>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          border="1px dashed"
+          borderRadius="8px"
+          py={1.5}
+          sx={{
+            cursor: 'pointer',
+            color: 'text.secondary',
+            '&:hover': { backgroundColor: 'action.hover' },
+          }}
+          onClick={() => document.getElementById('image').click()}
+        >
+          <UploadFile sx={{ mr: 1 }} />
+          <Typography>Choose a thumbnail image</Typography>
+        </Box>
+        <input
+          type="file"
+          id="image"
+          name="image"
+          accept="image/*"
+          onChange={handleChange}
+          style={{ display: 'none' }}
+        />
+      </Box>
+
+      <Box mb={2}>
+        <Typography variant="body1" color="textSecondary">
+          Upload Document (PDF or similar) *
+        </Typography>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          border="1px dashed"
+          borderRadius="8px"
+          py={1.5}
+          sx={{
+            cursor: 'pointer',
+            color: 'text.secondary',
+            '&:hover': { backgroundColor: 'action.hover' },
+          }}
+          onClick={() => document.getElementById('document').click()}
+        >
+          <UploadFile sx={{ mr: 1 }} />
+          <Typography>Choose a document file</Typography>
+        </Box>
+        <input
+          type="file"
+          id="document"
+          name="document"
+          required
+          accept=".pdf,.doc,.docx"
+          onChange={handleChange}
+          style={{ display: 'none' }}
+        />
+      </Box>
+
+      <Box mb={2}>
+        <Typography variant="body2" color="textSecondary">
+          Uploaded by: <span style={{ fontWeight: 'bold' }}>{username}</span>
+        </Typography>
+      </Box>
+
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        sx={{ py: 1.5, fontSize: '1rem', fontWeight: 'medium' }}
+        className='hover:scale-105'
+      >
+        Upload <AddTask className='ml-1'/>
+      </Button>
+    </form>
       </div>
     </div>
     </div>

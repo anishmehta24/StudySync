@@ -1,13 +1,15 @@
 // src/components/Navbar.jsx
+import { Book, BookOnline, CastForEducation, Code, CodeOff } from '@mui/icons-material';
 import React from 'react';
+import { FaCode, FaCodeBranch, FaCodepen, FaCodiepie } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
     <nav className="bg-gradient-to-r from-primary-light to-primary text-background py-4 shadow-md ">
       <div className="container mx-auto flex items-center justify-between">
-        <Link to="/" className="text-3xl font-extrabold text-background px-6">
-          StudySync
+        <Link to="/" className="text-3xl flex font-extrabold text-background px-6">
+        <FaCodepen className='mr-3 mt-1'/>StudySync
         </Link>
         <div className="flex space-x-6">
           <Link to="/dashboard" className="text-lg font-medium hover:text-primary-light transition">

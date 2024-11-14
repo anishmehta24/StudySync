@@ -46,9 +46,12 @@ const Dashboard = () => {
     <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen">
       <Navbar />
       <div className="container mx-auto px-6 py-16">
-        <h1 className="text-4xl font-extrabold text-primary-dark mb-12 text-center tracking-wide">
-          Welcome to Your Dashboard
+        <h1 className="text-4xl font-extrabold text-primary-dark mb-4 text-center tracking-wide">
+          Join the Learning Community
         </h1>
+        <p className="text-lg text-text-light mb-12 text-center">
+        Explore the features available to enhance your learning experience. Choose from a variety of tools to share notes, generate AI-powered content, connect with other students, and more.
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {features.map((feature, index) => (
             <a

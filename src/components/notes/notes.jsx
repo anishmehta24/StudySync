@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../Navbar';
 import { FaSearch, FaRegBookmark, FaRegThumbsUp, FaDownload } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { AddCircle, AutoAwesome } from '@mui/icons-material';
 
 const Notes = () => {
   const [notes] = useState([
@@ -35,13 +36,28 @@ const Notes = () => {
     <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen">
       <Navbar />
       
-      <div className="container mx-auto py-16 px-6">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-primary-dark">Notes</h1>
-         <Link to='/notes/upload'> <button className="bg-primary-dark text-background px-4 py-2 rounded-md hover:bg-primary transition duration-300">
-            Upload Note
-          </button>
-          </Link>
+      <div className="container mx-auto py-16 px-10 ">
+        <div className=''>
+        <div className="text-center mb-8 shadow-md shadow-current rounded-xl">
+            <h2 className="text-4xl font-extrabold text-primary-dark  py-10 text-center tracking-wide">Share Your Knowledge</h2>
+            <p className="text-lg text-text-light max-w-2xl mx-auto mb-4">
+              Upload your notes to help others learn and explore. Your contributions make this a valuable resource for everyone.
+            </p>
+            <Link to='/notes/upload'> 
+              <button className="bg-primary-dark text-background px-6 py-3 mb-8 rounded-md hover:bg-primary transition duration-300 font-medium mt-4">
+                Upload Your Notes <AddCircle className='ml-2 mb-1' />
+              </button>
+            </Link>
+        </div>
+        </div>
+
+        <div className="flex justify-between items-center mt-4 mb-8">
+          <h1 className="text-3xl font-bold text-primary-dark text-center tracking-normal">Featured Notes</h1>
+        <Link to='/ai-note-generation'> 
+            <button className="bg-primary-dark text-background px-4 py-2 rounded-md hover:bg-primary transition duration-300">
+            Generate Notes From AI <span><AutoAwesome className='mb-1'/></span>
+            </button>
+        </Link>
         </div>
 
         {/* Search and Filter */}
@@ -50,7 +66,7 @@ const Notes = () => {
             <FaSearch className="absolute left-3 text-primary-light" />
             <input
               type="text"
-              placeholder="Search notes..."
+              placeholder="Search for notes by title, author, or topic..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 py-2 rounded-md w-full focus:outline-none"
@@ -68,6 +84,7 @@ const Notes = () => {
             <option value="AI">Artificial Intelligence</option>
             {/* Add more tags here */}
           </select>
+          
         </div>
 
         {/* Notes List */}
