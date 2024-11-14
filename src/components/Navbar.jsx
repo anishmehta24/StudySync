@@ -1,52 +1,41 @@
 // src/components/Navbar.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <nav className="bg-primary text-background py-4 px-6">
+    <nav className="bg-primary-dark text-background py-4 shadow-md ">
       <div className="container mx-auto flex items-center justify-between">
-        {/* Logo Section */}
-        <a href="/" className="text-2xl font-bold text-background">
-          NoteShare
-        </a>
-        
-        {/* Menu Items */}
-        <div className="hidden md:flex space-x-8">
-          <a href="/" className="hover:text-secondary-light transition duration-200">
-            Home
-          </a>
-          <a href="/notes" className="hover:text-secondary-light transition duration-200">
+        <Link to="/" className="text-3xl font-extrabold text-background px-6">
+          StudySync
+        </Link>
+        <div className="flex space-x-6">
+          <Link to="/dashboard" className="text-lg font-medium hover:text-primary-light transition">
+            Dashboard
+          </Link>
+          <Link to="/notes" className="text-lg font-medium hover:text-primary-light transition">
             Notes
-          </a>
-          <a href="/groups" className="hover:text-secondary-light transition duration-200">
-            Groups
-          </a>
-          <a href="/community" className="hover:text-secondary-light transition duration-200">
+          </Link>
+          <Link to="/community" className="text-lg font-medium hover:text-primary-light transition">
             Community
-          </a>
-          <a href="/profile" className="hover:text-secondary-light transition duration-200">
-            Profile
-          </a>
+          </Link>
+          <Link to="/chat" className="text-lg font-medium hover:text-primary-light transition">
+            Chat
+          </Link>
+          <Link to="/groups" className="text-lg font-medium hover:text-primary-light transition">
+            Groups
+          </Link>
+          <Link to="/noticeboard" className="text-lg font-medium hover:text-primary-light transition">
+            Notice Board
+          </Link>
         </div>
-
-        {/* Mobile Menu Icon */}
-        <div className="md:hidden flex items-center">
-          <button className="text-background focus:outline-none">
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>
-            </svg>
-          </button>
+        <div className='px-4'>
+          <Link
+            to="/"
+            className="bg-background text-primary-dark px-4 py-2 rounded-lg font-semibold shadow hover:bg-primary-light hover:text-white transition"
+          >
+            Logout
+          </Link>
         </div>
       </div>
     </nav>

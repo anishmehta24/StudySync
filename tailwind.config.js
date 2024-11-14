@@ -10,19 +10,19 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#FF5A5F', // Coral Red
-          light: '#FF8A80',   // Light Coral
-          dark: '#E63946',    // Deep Coral
+          DEFAULT: '#000000', // Black
+          light: '#4F4F4F',   // Dark Gray for hover effects
+          dark: '#1A1A1A',    // Almost Black for emphasis
         },
         secondary: {
-          DEFAULT: '#36C9C6', // Turquoise
-          light: '#89E2DE',   // Light Turquoise
-          dark: '#0F4C5C',    // Dark Teal
+          DEFAULT: '#FFFFFF', // White
+          light: '#E0E0E0',   // Light Gray for borders
+          dark: '#BDBDBD',    // Gray for secondary text
         },
-        background: '#FFF9F4', // Off-White
+        background: '#FFFFFF', // Pure White for background
         text: {
-          DEFAULT: '#2A2D34', // Charcoal
-          light: '#595E69',   // Grayish Blue
+          DEFAULT: '#000000', // Black for primary text
+          light: '#4F4F4F',   // Dark Gray for secondary text
         },
       },
     },

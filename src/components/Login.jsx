@@ -6,7 +6,7 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen bg-background ">
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center text-primary">
-          Login to NoteShare
+          Login to StudySync
         </h2>
 
         <form className="mt-6">
