@@ -43,9 +43,9 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen">
-      <Navbar />
-      <div className="container mx-auto px-6 py-16">
+    <div className=" min-h-screen">
+      <Navbar/>
+      <div className="bg-gradient-to-r from-background to-secondary-light container mx-auto px-6 py-16">
         <h1 className="text-4xl font-extrabold text-primary-dark mb-4 text-center tracking-wide">
           Join the Learning Community
         </h1>
