@@ -19,7 +19,7 @@ const Group = () => {
   };
 
   const redirectToCommunityForm = () => {
-    window.location.href = '/community-form';
+    window.location.href = '/community';
   };
 
   const redirectToChatPage = () => {
@@ -27,7 +27,7 @@ const Group = () => {
   };
 
   const redirectToNoticeBoard = () => {
-    window.location.href = '/notice-board';
+    window.location.href = '/noticeboard';
   };
 
   return (
@@ -44,23 +44,24 @@ const Group = () => {
           </h3>
           <hr className="border-t-2 border-primary-dark w-1/2 mx-auto my-4" />
           <br />
-          <div className="flex items-center justify-around">
+          <div className="flex flex-wrap items-center justify-around gap-4">
             <img
                 src="../public/group4.png"
                 alt="Study Illustration 1"
-                className="rounded-lg shadow-lg shadow-current w-80 h-60 object-cover"
+                className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover"
             />
             <img
                 src="../public/group3.png"
                 alt="Study Illustration 2"
-                className="rounded-lg shadow-lg shadow-current w-80 h-60 object-cover"
+                className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover"
             />
             <img
                 src="../public/group5.png"
-                alt="Study Illustration 2"
-                className="rounded-lg shadow-lg shadow-current w-80 h-60 object-cover"
+                alt="Study Illustration 3"
+                className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover"
             />
-          </div>
+        </div>
+
         </div>
 
         {/* Search Study Groups Section */}
@@ -111,6 +112,7 @@ const Group = () => {
           <div className="flex-grow lg:flex-[3]">
             <h1 className="text-3xl text-primary-dark font-bold mb-6">
               Featured Study Groups
+              <hr className='mt-2 border border-secondary-dark w-1/2'/>
             </h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 max-w-5xl">
               <StudyGroupCard
