@@ -11,6 +11,8 @@ import Aigenerator from './components/ai-notes-generation/Aigenerator'
 import theme from './theme'
 import { ThemeProvider } from '@mui/material'
 import Community from './components/Community/Community'
+import GroupStudyFinder from './components/groups/Group'
+import Group from './components/groups/Group'
 
 function App() {
 
@@ -23,6 +25,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/notes" element={<Notes/>} />
       <Route path="/community" element={<Community/>} />
+      <Route path="/groups" element={<Group/>} />
       <Route path="/ai-note-generation" element={<Aigenerator/>} />
       <Route path="/notes/upload" element={<Uploadnotes/>} />
       <Route path="/signup" element={<Signup />} />
