@@ -5,13 +5,13 @@ import { FaBook, FaRobot, FaComments, FaUsers, FaChalkboard, FaBell } from 'reac
 const Dashboard = () => {
   const features = [
     {
-      title: 'Note Sharing Platform',
+      title: 'Notes Sharing Platform',
       description: 'Upload, view, and share notes with other users.',
       link: '/notes',
       icon: <FaBook className="text-primary text-4xl" />,
     },
     {
-      title: 'AI Note Generation',
+      title: 'AI Notes   Generation',
       description: 'Generate notes using AI based on a topic or document.',
       link: '/ai-note-generation',
       icon: <FaRobot className="text-primary text-4xl" />,
@@ -20,13 +20,13 @@ const Dashboard = () => {
       title: 'Community Support',
       description: 'Ask questions, share tips, and help others in our forum.',
       link: '/community',
-      icon: <FaComments className="text-primary text-4xl" />,
+      icon: <FaUsers className="text-primary text-4xl" />,
     },
     {
       title: 'Chat Feature',
       description: 'Chat with other users in real-time, one-on-one or in groups.',
       link: '/chat',
-      icon: <FaUsers className="text-primary text-4xl" />,
+      icon:  <FaComments className="text-primary text-4xl" />,
     },
     {
       title: 'Group Study Finder',
@@ -57,7 +57,7 @@ const Dashboard = () => {
             <a
               href={feature.link}
               key={index}
-              className="bg-white border border-gray-200 p-8 rounded-lg shadow-lg hover:shadow-xl hover:bg-secondary-light hover:text-background transition duration-300 transform hover:scale-105"
+              className="bg-gradient-to-r from-background to-secondary-light border-gray-200 p-8 rounded-lg shadow-md shadow-current hover:shadow-xl hover:shadow-current hover:bg-secondary-light  transition duration-300 transform hover:scale-105"
             >
               <div className="flex flex-col items-center text-center">
                 {feature.icon}

@@ -10,6 +10,7 @@ import Uploadnotes from './components/notes/uploadnotes'
 import Aigenerator from './components/ai-notes-generation/Aigenerator'
 import theme from './theme'
 import { ThemeProvider } from '@mui/material'
+import Community from './components/Community/Community'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/notes" element={<Notes/>} />
+      <Route path="/community" element={<Community/>} />
       <Route path="/ai-note-generation" element={<Aigenerator/>} />
       <Route path="/notes/upload" element={<Uploadnotes/>} />
       <Route path="/signup" element={<Signup />} />

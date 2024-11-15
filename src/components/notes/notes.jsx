@@ -44,7 +44,7 @@ const Notes = () => {
               Upload your notes to help others learn and explore. Your contributions make this a valuable resource for everyone.
             </p>
             <Link to='/notes/upload'> 
-              <button className="bg-primary-dark text-background px-6 py-3 mb-8 rounded-md hover:bg-primary transition duration-300 font-medium mt-4">
+              <button className="bg-primary-dark text-background px-6 py-3 mb-8 rounded-md hover:scale-105 transition duration-300 mt-4">
                 Upload Your Notes <AddCircle className='ml-2 mb-1' />
               </button>
             </Link>
@@ -54,7 +54,7 @@ const Notes = () => {
         <div className="flex justify-between items-center mt-4 mb-8">
           <h1 className="text-3xl font-bold text-primary-dark text-center tracking-normal">Featured Notes</h1>
         <Link to='/ai-note-generation'> 
-            <button className="bg-primary-dark text-background px-4 py-2 rounded-md hover:bg-primary transition duration-300">
+            <button className="bg-primary-dark text-background px-4 py-2 rounded-md hover:scale-105 transition duration-100">
             Generate Notes From AI <span><AutoAwesome className='mb-1'/></span>
             </button>
         </Link>
@@ -92,7 +92,7 @@ const Notes = () => {
           {filteredNotes.map((note) => (
             <div
               key={note.id}
-              className="bg-background border border-secondary-light p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 cursor-pointer"
+              className="bg-gradient-to-r from-background to-secondary-light border border-secondary-light p-4 rounded-lg shadow-md shadow-current hover:shadow-lg hover:shadow-current transition duration-300 cursor-pointer"
               onClick={() => setSelectedNote(note)}
             >
               <img src={note.thumbnail} alt={note.title} className="w-full h-40 object-cover rounded-t-md mb-2" />
