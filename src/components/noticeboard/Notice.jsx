@@ -2,32 +2,33 @@ import React from 'react';
 import Navbar from '../Navbar';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import EventIcon from '@mui/icons-material/Event';
+import StarIcon from '@mui/icons-material/Star';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import PushPinIcon from '@mui/icons-material/PushPin';
+import { motion } from 'framer-motion';
+import Tilt from 'react-parallax-tilt';
 
 const NoticeBoard = () => {
+  const postAnnouncement = () => {
+    alert('Post Announcement functionality will go here!');
+  };
+
   return (
     <div>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-r from-background to-secondary-light px-6 py-10 flex flex-col items-center">
+      <div className="min-h-screen bg-gradient-to-r from-background to-secondary-light px-6 py-10 flex flex-col items-center animate-fadeIn">
         {/* Hero Section */}
         <div className="text-center mb-12 space-y-4">
-          <h1 className="text-4xl font-extrabold text-primary-dark mb-4 text-center tracking-wide">
+          <h1 className="text-4xl font-extrabold text-primary-dark mb-4 tracking-wide animate-bounceIn">
             📜 Digital Notice Board!
           </h1>
-          <h3 className="text-lg text-text-light mb-12 text-center">
+          <h3 className="text-lg text-text-light mb-12 animate-fadeIn">
             Important updates, upcoming events, and featured announcements all in one place.
           </h3>
-          <hr className="border-t-2 border-primary-dark w-1/4 mx-auto my-4" />
-          <div className="flex items-center justify-center">
-            <img
-              src="../public/group5.png" 
-              alt="Digital Notice Board Illustration"
-              className="rounded-lg shadow-lg w-80 h-60 object-cover sm:max-w-xl"
-            />
-          </div>
+          <hr className="border-t-2 border-primary-dark w-1/2 mx-auto my-4" />
         </div>
 
-        <div className="flex flex-col lg:flex-row w-full max-w-7xl space-y-8 lg:space-y-0 lg:space-x-8">
+        <div className="flex flex-col lg:flex-row w-full max-w-7xl space-y-8 lg:space-y-0 lg:space-x-8 animate-slideIn">
           {/* Center Section */}
           <div className="flex-grow lg:flex-[3]">
             <h1 className="text-3xl text-primary-dark font-bold mb-6">
@@ -64,7 +65,16 @@ const NoticeBoard = () => {
           </div>
 
           {/* Right Section */}
-          <div className="w-full lg:w-1/4 shadow-lg shadow-current p-6 space-y-6 border rounded-lg">
+          <div className="w-full lg:w-1/4 shadow-lg shadow-current p-6 space-y-6 border rounded-lg bg-gradient-to-r from-background to-secondary-light relative animate-fadeIn">
+            <motion.button
+              onClick={postAnnouncement}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-full bg-primary-dark text-white py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mb-6"
+            >
+              + Post Announcement
+            </motion.button>
+
             <h2 className="text-xl font-bold text-primary-dark mb-4">
               📌 Pinned Notices
             </h2>
@@ -84,35 +94,58 @@ const NoticeBoard = () => {
 };
 
 const AnnouncementCard = ({ title, date, description }) => (
-  <div className="bg-white shadow-lg rounded-xl p-4 transform hover:scale-105 transition duration-300">
-    <div className="flex items-center space-x-2 mb-4">
-      <NotificationsActiveIcon color="primary" />
-      <h4 className="text-lg font-bold text-primary-dark">{title}</h4>
-    </div>
-    <p className="text-sm text-gray-600">{description}</p>
-    <hr className="my-4" />
-    <div className="text-sm text-gray-500">{date}</div>
-  </div>
+  <Tilt>
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      className="bg-gradient-to-tr from-gray-50 to-gray-100 shadow-lg rounded-lg p-4 relative border-l-8 border-blue-500"
+    >
+      <div className="absolute top-3 right-3 text-yellow-500">
+        <StarIcon fontSize="large" className="animate-spin-slow" />
+      </div>
+      <div className="flex items-center space-x-2 mb-4">
+        <NotificationsActiveIcon color="primary" />
+        <h4 className="text-lg font-bold text-primary-dark">{title}</h4>
+      </div>
+      <p className="text-sm text-gray-600">{description}</p>
+      <hr className="my-4" />
+      <div className="text-sm text-gray-500">{date}</div>
+    </motion.div>
+  </Tilt>
 );
 
 const EventCard = ({ title, date, details }) => (
-  <div className="bg-white shadow-lg rounded-xl p-4 transform hover:scale-105 transition duration-300">
-    <div className="flex items-center space-x-2 mb-4">
-      <EventIcon color="primary" />
-      <h4 className="text-lg font-bold text-primary-dark">{title}</h4>
-    </div>
-    <p className="text-sm text-gray-600">{details}</p>
-    <hr className="my-4" />
-    <div className="text-sm text-gray-500">{date}</div>
-  </div>
+  <Tilt>
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      className="bg-gradient-to-tr from-gray-50 to-gray-100 shadow-lg rounded-lg p-4 relative border-l-8 border-green-500"
+    >
+      <div className="absolute top-3 right-3 text-yellow-500">
+        <StarIcon fontSize="large" className="animate-pulse" />
+      </div>
+      <div className="flex items-center space-x-2 mb-4">
+        <EventIcon color="primary" />
+        <h4 className="text-lg font-bold text-primary-dark">{title}</h4>
+      </div>
+      <p className="text-sm text-gray-600">{details}</p>
+      <hr className="my-4" />
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-gray-500">{date}</span>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center space-x-2 text-sm bg-green-500 text-white py-1 px-3 rounded-full shadow-md hover:shadow-lg"
+        >
+          <NotificationsIcon fontSize="small" />
+          <span>Notify Me</span>
+        </motion.button>
+      </div>
+    </motion.div>
+  </Tilt>
 );
 
 const PinnedNotice = ({ title, description }) => (
-  <div className="bg-gray-50 shadow-inner rounded-lg p-4">
-    <div className="flex items-center space-x-2 mb-2">
-      <PushPinIcon color="primary" />
-      <h4 className="text-lg font-bold text-primary-dark">{title}</h4>
-    </div>
+  <div className="bg-yellow-50 shadow-md rounded-lg p-4 border-l-4 border-yellow-500 relative">
+    <h4 className="text-lg font-bold text-primary-dark">{title}</h4>
     <p className="text-sm text-gray-700">{description}</p>
   </div>
 );
