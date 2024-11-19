@@ -11,6 +11,12 @@ const Dashboard = () => {
       icon: <FaBook className="text-primary text-4xl" />,
     },
     {
+      title: 'Group Study Finder',
+      description: 'Find study groups based on subjects or interests.',
+      link: '/groups',
+      icon: <FaChalkboard className="text-primary text-4xl" />,
+    },
+    {
       title: 'AI Notes   Generation',
       description: 'Generate notes using AI based on a topic or document.',
       link: '/ai-note-generation',
@@ -22,17 +28,12 @@ const Dashboard = () => {
       link: '/community',
       icon: <FaUsers className="text-primary text-4xl" />,
     },
+    
     {
       title: 'Chat Feature',
       description: 'Chat with other users in real-time, one-on-one or in groups.',
       link: '/chat',
       icon:  <FaComments className="text-primary text-4xl" />,
-    },
-    {
-      title: 'Group Study Finder',
-      description: 'Find study groups based on subjects or interests.',
-      link: '/groups',
-      icon: <FaChalkboard className="text-primary text-4xl" />,
     },
     {
       title: 'Digital Notice Board',

@@ -46,17 +46,17 @@ const Group = () => {
           <br />
           <div className="flex flex-wrap items-center justify-around gap-4">
             <img
-                src="../public/group4.png"
+                src="/group4.png"
                 alt="Study Illustration 1"
                 className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover"
             />
             <img
-                src="../public/group3.png"
+                src="/group3.png"
                 alt="Study Illustration 2"
                 className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover"
             />
             <img
-                src="../public/group5.png"
+                src="/group5.png"
                 alt="Study Illustration 3"
                 className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover"
             />
