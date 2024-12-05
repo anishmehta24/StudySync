@@ -1,4 +1,4 @@
-# MERN Stack All-in-One App for Students
+# Study-Sync All-in-One App for Students(MERN Stack)
 
 An all-encompassing platform tailored for the student community, designed to foster collaboration and efficient learning. This application connects students with shared academic goals, interests, and schedules, helping them thrive in their studies.
 
