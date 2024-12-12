@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
 
    const navigate = useNavigate()
-  const {backendUrl,setIsLoggedin} = useContext(AppContext)
+  const {backendUrl,setIsLoggedin,getUserData} = useContext(AppContext)
   // State variables for storing user inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +25,7 @@ const Login = () => {
           { email,password});
         if(data.success) {
           setIsLoggedin(true)
+          getUserData()
           navigate("/dashboard")
         }
         else{

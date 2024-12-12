@@ -254,12 +254,46 @@ export const sendResetOtp = async(req,res)=>{
     }
 }
 
+//verify reset otp
+export const verifyResetOtp = async (req, res) => {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+        return res.json({ success: false, message: "Email and OTP are required" });
+    }
+
+    try {
+        const user = await userModel.findOne({ email });
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        if (user.resetOtp === "" || user.resetOtp !== otp) {
+            return res.json({ success: false, message: "Invalid OTP" });
+        }
+
+        if (user.resetOtpExpireAt < Date.now()) {
+            return res.json({ success: false, message: "OTP expired" });
+        }
+
+        // OTP verified successfully, clear OTP fields
+        user.resetOtp = ""; 
+        user.resetOtpExpireAt = 0; 
+        await user.save();
+
+        return res.json({ success: true, message: "OTP verified successfully" });
+    } catch (error) {
+        return res.json({ success: false, message: error.message });
+    }
+};
+
+
 //Reset User Password
 export const resetPassword = async(req,res)=>{
-    const {email,otp,newPassword} = req.body;
+    const {email,newPassword} = req.body;
 
-    if(!email || !otp || !newPassword) {
-        return res.json({success:false, message:"Email,otp and new password are required"})
+    if(!email || !newPassword) {
+        return res.json({success:false, message:"Password is required"})
     }
 
     try {
@@ -269,21 +303,10 @@ export const resetPassword = async(req,res)=>{
             return res.json({success:false,message:"User Not found"})
         }
 
-        if(user.resetOtp === "" || user.resetOtp !== otp) {
-            return res.json({success:false,message:"Invalid Otp"})
-        }
-
-        if(user.resetOtpExpireAt< Date.now()){
-            return res.json({success:false,message:"OTP expired"});
-
-        }
-
+       
         const hashedPassword= await bcrpyt.hash(newPassword,10)
 
         user.password = hashedPassword;
-
-        user.resetOtp=""
-        user.resetOtpExpireAt=0
 
         await user.save();
 

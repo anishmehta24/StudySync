@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Navbar from './Navbar'
 import { FaBook, FaRobot, FaComments, FaUsers, FaChalkboard, FaBell } from 'react-icons/fa';
+import { AppContext } from '../context/AppContext';
 
 const Dashboard = () => {
+
+  const {userData} = useContext(AppContext)
+
   const features = [
     {
       title: 'Notes Sharing Platform',
@@ -48,7 +52,7 @@ const Dashboard = () => {
       <Navbar/>
       <div className="bg-gradient-to-r from-background to-secondary-light container mx-auto px-6 py-16">
         <h1 className="text-4xl font-extrabold text-primary-dark mb-4 text-center tracking-wide">
-          Join the Learning Community
+           Hey, <span className="font-semi">{userData.name} !</span>  Welcome to StudySync!
         </h1>
         <p className="text-lg text-text-light mb-12 text-center">
         Explore the features available to enhance your learning experience. Choose from a variety of tools to share notes, generate AI-powered content, connect with other students, and more.

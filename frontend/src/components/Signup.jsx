@@ -12,7 +12,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-   const {backendUrl,setIsLoggedin} = useContext(AppContext)
+   const {backendUrl,setIsLoggedin,getUserData} = useContext(AppContext)
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
@@ -25,6 +25,7 @@ const Signup = () => {
           { name,email,password});
         if(data.success) {
           setIsLoggedin(true)
+          getUserData()
           navigate("/dashboard")
         }
         else{
