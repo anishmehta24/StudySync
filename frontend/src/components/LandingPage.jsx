@@ -21,39 +21,39 @@ const LandingPage = () => {
 
   return (
     <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen">
-       <nav
-    className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${
-      scrolled ? 'bg-gradient-to-r from-primary-light to-primary shadow-md' : 'bg-gradient-to-r from-background to-secondary-light shadow-md'
-    }`}
-  >
-    <div className="container mx-auto flex items-center justify-between py-4 px-6">
-      <Link to="/" className={`text-3xl flex font-extrabold ${scrolled ? 'text-background' : 'text-primary'}`}>
-      <FaCodepen className='mr-3 mt-1'/> StudySync
-      </Link>
-      <div>
-        <a
-          href="/login"
-          className={`px-4 py-2 border rounded-md font-semibold transition duration-200 mr-4 ${
-            scrolled
-              ? 'text-background bg-primary hover:bg-secondary-dark border-background'
-              : 'text-primary hover:bg-primary-light border-primary'
-          }`}
-        >
-          Login
-        </a>
-        <a
-          href="/signup"
-          className={`px-4 py-2 border rounded-md font-semibold transition duration-200 ${
-            scrolled
-              ? 'text-background bg-primary hover:bg-secondary-dark border-background'
-              : 'text-primary hover:bg-primary-light border-primary'
-          }`}
-        >
-          Sign Up
-        </a>
-      </div>
-    </div>
-  </nav>
+      <nav
+        className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${
+          scrolled ? 'bg-gradient-to-r from-primary-light to-primary shadow-md' : 'bg-gradient-to-r from-background to-secondary-light shadow-md'
+        }`}
+      >
+        <div className="container mx-auto flex items-center justify-between py-4 px-6">
+          <Link to="/" className={`text-3xl flex font-extrabold ${scrolled ? 'text-background' : 'text-primary'}`}>
+          <FaCodepen className='mr-3 mt-1'/> StudySync
+          </Link>
+          <div>
+            <a
+              href="/login"
+              className={`px-4 py-2 border rounded-md font-semibold transition duration-200 mr-4 ${
+                scrolled
+                  ? 'text-background bg-primary hover:bg-secondary-dark border-background'
+                  : 'text-primary hover:bg-primary-light border-primary'
+              }`}
+            >
+              Login
+            </a>
+            <a
+              href="/signup"
+              className={`px-4 py-2 border rounded-md font-semibold transition duration-200 ${
+                scrolled
+                  ? 'text-background bg-primary hover:bg-secondary-dark border-background'
+                  : 'text-primary hover:bg-primary-light border-primary'
+              }`}
+            >
+              Sign Up
+            </a>
+          </div>
+        </div>
+      </nav>
 
       {/* Hero Section with larger video */}
       <header className="container mx-auto mt-16 px-6 py-20 text-center md:text-left pt-28">

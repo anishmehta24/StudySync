@@ -205,3 +205,91 @@ export const isAuthenticated = async(req,res)=>{
         res.json({success:false, message: error.message});
     }
 }
+
+//Send password Reset OTP
+export const sendResetOtp = async(req,res)=>{
+    const {email}= req.body;
+    if(!email) {
+        return res.json({success:false, message:"Email is required"})
+    }
+
+    try {
+
+        const user = await userModel.findOne({email});
+        if(!user){
+           return res.json({success:false, message: "User not found"});
+        }
+
+        const otp =  String(Math.floor(100000 + Math.random() * 900000));
+
+        user.resetOtp = otp;
+        user.resetOtpExpireAt= Date.now() + 15*60*1000;
+  
+        await user.save();
+  
+        const mailOptions = {
+          from: process.env.SENDER_EMAIL, // Sender address
+          to: user.email, // Recipient's email address
+          subject: '🔐 Reset Your Password – StudySync',
+          html: `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; text-align: center;">
+              <h2 style="color: #4CAF50;">Password Reset Code</h2>
+              <p>Hi ${user.name},</p>
+              <p>You recently requested to reset your password for your StudySync account. Use the verification code below to proceed:</p>
+              <div style="margin: 20px auto; padding: 10px; border: 1px solid #4CAF50; border-radius: 5px; display: inline-block; font-size: 24px; font-weight: bold; color: #4CAF50;">
+                ${otp}
+              </div>
+              <p>This code will expire in 15 minutes. If you did not request a password reset, please ignore this email or contact us at <a href="mailto:support@studysync.com">support@studysync.com</a>.</p>
+              <p>For your security, please do not share this code with anyone.</p>
+              <p>Best regards,<br>The StudySync Team</p>
+            </div>
+          `,
+        }
+        await transporter.sendMail(mailOptions)
+
+        return res.json({success:true,message:"OTP Sent to your email"})
+        
+    } catch (error) {
+       return res.json({success:false, message: error.message});
+    }
+}
+
+//Reset User Password
+export const resetPassword = async(req,res)=>{
+    const {email,otp,newPassword} = req.body;
+
+    if(!email || !otp || !newPassword) {
+        return res.json({success:false, message:"Email,otp and new password are required"})
+    }
+
+    try {
+
+        const user = await userModel.findOne({email});
+        if(!user){
+            return res.json({success:false,message:"User Not found"})
+        }
+
+        if(user.resetOtp === "" || user.resetOtp !== otp) {
+            return res.json({success:false,message:"Invalid Otp"})
+        }
+
+        if(user.resetOtpExpireAt< Date.now()){
+            return res.json({success:false,message:"OTP expired"});
+
+        }
+
+        const hashedPassword= await bcrpyt.hash(newPassword,10)
+
+        user.password = hashedPassword;
+
+        user.resetOtp=""
+        user.resetOtpExpireAt=0
+
+        await user.save();
+
+        return res.json({success:true,message:"Password changed successfully"})
+        
+    } catch (error) {
+       return res.json({success:false, message: error.message});
+    }
+}
