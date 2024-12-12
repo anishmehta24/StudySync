@@ -1,6 +1,7 @@
 import bcrpyt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/user.model.js";
+import transporter from "../config/nodemailer.js";
 
 // USER SIGNUP CONTROLLER FUNCTION 
 export const register = async(req,res)=>{
@@ -31,10 +32,37 @@ export const register = async(req,res)=>{
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
+        //Sending welcome email
+        const mailOptions = {
+            from:process.env.SENDER_EMAIL,
+            to: email,
+            subject: "🎉 Welcome to StudySync – Let’s Achieve Your Goals Together!",
+            html: `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+              <h2 style="color: #4CAF50;">Welcome to StudySync, ${name}!</h2>
+              <p>Hi ${name},</p>
+              <p>We’re thrilled to have you join the StudySync community! 🚀</p>
+              <p>StudySync is your go-to platform for staying organized, managing your studies, and achieving your academic and personal goals. Here’s what you can do next:</p>
+              <ul>
+                <li><strong>Get Started Quickly:</strong> Explore your personalized dashboard.</li>
+                <li><strong>Track Your Progress:</strong> Monitor your study habits and stress levels.</li>
+                <li><strong>Reach Your Full Potential:</strong> Access our tailored tools to stay on top of your game.</li>
+              </ul> 
+              <p>If you ever need help or have questions, our support team is here for you. You can reach us anytime at <a href="mailto:support@studysync.com">support@studysync.com</a>.</p>
+              <p>Let’s make your learning journey smooth and rewarding.</p>
+              <p>Best wishes,<br>The StudySync Team</p>
+            </div>
+          `,
+        }
+
+        await transporter.sendMail(mailOptions);
+        
+
+
         return res.json({success:true});
     }
     catch(error) {
-        res.json({success:false , message : error.message})
+       return res.json({success:false , message : error.message})
     }
 } 
 
@@ -69,7 +97,7 @@ export const login =async (req,res) => {
         return res.json({success:true});
 
     } catch (error) {
-        res.json({success:true , message:error.message})
+       return res.json({success:false , message:error.message})
     }
 }
 
@@ -84,6 +112,96 @@ export const logout = async(req,res)=>{
         })
         return res.json({success:true, message:"Logged Out"});
     } catch (error) {
-        res.json({success:true , message:error.message})
+       return res.json({success:false , message:error.message})
+    }
+}
+
+// Send verification otp
+export const sendVerifyOtp = async (req,res)=>{
+    try {
+        const {userId} = req.body;
+        const user = await userModel.findById(userId);
+
+        if(user.isAccountVerified){
+            return res.json({success:false , message:"Account already verified"})
+        }
+
+      const otp =  String(Math.floor(100000 + Math.random() * 900000));
+
+      user.verifyOtp = otp;
+      user.verifyOtpExpireAt= Date.now() + 24*60*60*1000;
+
+      await user.save();
+
+      const mailOptions = {
+        from: process.env.SENDER_EMAIL, // Sender address
+        to: user.email, // Recipient's email address
+        subject: '🔐 Verify Your Email for StudySync',
+        html: `
+          <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; text-align: center;">
+            <h2 style="color: #4CAF50;">Email Verification Code</h2>
+            <p>Hi ${user.name},</p>
+            <p>Thank you for registering with StudySync! To complete your sign-up, please use the verification code below:</p>
+            <div style="margin: 20px auto; padding: 10px; border: 1px solid #4CAF50; border-radius: 5px; display: inline-block; font-size: 24px; font-weight: bold; color: #4CAF50;">
+              ${otp}
+            </div>
+            <p>This code will expire in 10 minutes, so please verify your email soon.</p>
+            <p>If you didn’t request this, please ignore this email or contact us at <a href="mailto:support@studysync.com">support@studysync.com</a>.</p>
+            <p>Best wishes,<br>The StudySync Team</p>
+          </div>
+        `,
+      }
+      await transporter.sendMail(mailOptions)
+
+     return res.json({success:true , message:"Verification otp sent on email"});
+      
+
+    } catch (error) {
+       return res.json({success:false , message:error.message})
+    }
+}
+
+//Verification of email
+
+export const verifyEmail = async(req,res) =>{
+    const {userId, otp} = req.body;
+    if(!userId || !otp) {
+       return res.json({success:false , message:"Missing details"})
+    }
+    try {
+
+        const user = await userModel.findById(userId);
+        if(!user ){
+           return res.json({success:false , message:"User Not Found"})
+        }
+        
+        if(user.verifyOtp === '' || user.verifyOtp!== otp){
+            return res.json({success:false , message:"Invalid Otp"})
+        }
+
+        if(user.verifyOtpExpireAt < Date.now() ){
+            return res.json({success:false , message:"Otp expired"})
+        }
+
+        user.isAccountVerified=true;
+        user.verifyOtp=''
+        user.verifyOtpExpireAt=0;
+
+        await user.save();
+        return res.json({success:true , message:"Email Verified Successfully!"})
+    } catch (error) {
+       return res.json({success:false , message:error.message})
+    }
+
+    
+}
+
+//check if user is authenticated
+
+export const isAuthenticated = async(req,res)=>{
+    try {
+        return res.json({success:true});
+    } catch (error) {
+        res.json({success:false, message: error.message});
     }
 }
