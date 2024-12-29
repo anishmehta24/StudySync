@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import userModel from "../models/user.model.js";
 import transporter from "../config/nodemailer.js";
 
-// USER SIGNUP CONTROLLER FUNCTION 
+//REGISTER USER SIGNUP CONTROLLER FUNCTION 
 export const register = async(req,res)=>{
     const {name,email,password} = req.body;
 
@@ -57,7 +57,6 @@ export const register = async(req,res)=>{
 
         await transporter.sendMail(mailOptions);
         
-
 
         return res.json({success:true});
     }

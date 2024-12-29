@@ -1,27 +1,17 @@
 import express from 'express'
-import multer from 'multer'
-import { uploadNotes } from '../controllers/notesController.js';
+import { getNotes, getNotesByID, uploadNotes } from '../controllers/notesController.js';
+import { upload } from '../middlewares/multer.middleware.js';
 // import { uploadNotes } from '../controllers/notesController.js';
 const notesRouter = express.Router();
 
-const storage = multer.diskStorage({
-    destination: function (req,file,cb) {
-        const destinationPath = './files';
-        cb(null,destinationPath);
-    },
-    filename:function (req,file,cb) {
-        const uniqueSuffix = Date.now();
-        cb(null,uniqueSuffix + file.originalname);
-    },
-});
 
-const upload = multer({
-    storage: storage
-})
 
-notesRouter.post("/upload",upload.single("file"),uploadNotes);
-// notesRouter.get("/getFiles",notesController.getNote);
-// notesRouter.get("/getFiles/:id",notesController.getNoteByID);
+notesRouter.post("/upload", upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'document', maxCount: 1 },
+  ]),uploadNotes);
+notesRouter.get("/getFiles",getNotes);
+notesRouter.get("/getFiles/:id",getNotesByID);
 
 
 export default notesRouter

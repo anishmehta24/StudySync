@@ -22,12 +22,28 @@ const Uploadnotes = ({ username }) => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Upload functionality here...
-    console.log(formData);
-    alert('Note uploaded successfully!');
-    navigate('/notes');// Redirect after upload
+  const handleSubmit = async(e) => {
+   
+      axios.defaults.withCredentials = true
+          
+      const form = new FormData();
+      form.append('title', formData.title);
+      form.append('description', formData.description);
+      form.append('tags', formData.tags);
+      if (formData.image) form.append('image', formData.image);
+      form.append('document', formData.document);
+      form.append('uploadedBy', username); 
+
+      const { data } = await axios.post('/api/notes/upload', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      if(data.success) {
+        toast.success("Notes Uploaded Successfully")
+        navigate("/notes")
+      }
+      else{
+        toast.error(data.message)
+      }
   };
 
   return (
