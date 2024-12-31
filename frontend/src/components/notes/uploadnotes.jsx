@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
 import { Box, TextField, Typography, Button } from '@mui/material';
 import {  AddTask,  UploadFile,  UploadRounded,} from '@mui/icons-material';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const Uploadnotes = ({ username }) => {
+const Uploadnotes = () => {
+  const {userData,backendUrl,setIsLoggedin,getUserData} = useContext(AppContext)
+  // console.log(userData);
+  const username = userData?.name;
+  const userId = userData?.id;
+  // console.log(userId);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
@@ -23,8 +31,12 @@ const Uploadnotes = ({ username }) => {
   };
 
   const handleSubmit = async(e) => {
+
+    e.preventDefault();
    
       axios.defaults.withCredentials = true
+
+       console.log(formData)
           
       const form = new FormData();
       form.append('title', formData.title);
@@ -32,11 +44,9 @@ const Uploadnotes = ({ username }) => {
       form.append('tags', formData.tags);
       if (formData.image) form.append('image', formData.image);
       form.append('document', formData.document);
-      form.append('uploadedBy', username); 
+      form.append('uploadedBy', userId); 
 
-      const { data } = await axios.post('/api/notes/upload', form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const { data } = await axios.post(backendUrl + '/api/notes/upload', form );
       if(data.success) {
         toast.success("Notes Uploaded Successfully")
         navigate("/notes")

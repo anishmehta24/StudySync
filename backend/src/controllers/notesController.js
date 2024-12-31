@@ -13,15 +13,12 @@ dotenv.config({ path: './env' });
 
 export const uploadNotes = async (req, res) => {
   try {
-    const uploadFiles = upload.fields([
-      { name: 'image', maxCount: 1 },
-      { name: 'document', maxCount: 1 },
-    ]);
+    // console.log("hello")
+    // res.json({success : true , message: 'Notes uploaded successfully'})
+    
 
-    uploadFiles(req, res, async (err) => {
-      if (err) {
-        return res.status(400).json({ success: false, message: err.message });
-      }
+   
+
 
       const { title, description, tags, uploadedBy } = req.body;
       const documentFile = req.files.document?.[0];
@@ -68,9 +65,8 @@ export const uploadNotes = async (req, res) => {
       res.status(200).json({
         success: true,
         message: 'Notes uploaded successfully',
-        data: newNote,
       });
-    });
+    ;
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

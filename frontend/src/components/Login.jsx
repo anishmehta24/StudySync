@@ -26,6 +26,7 @@ const Login = () => {
         if(data.success) {
           setIsLoggedin(true)
           getUserData()
+          toast.success("Logged In Successfully")
           navigate("/dashboard")
         }
         else{
