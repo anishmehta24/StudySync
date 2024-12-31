@@ -1,36 +1,42 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Navbar from '../Navbar';
-import { FaSearch, FaRegBookmark, FaRegThumbsUp, FaDownload } from 'react-icons/fa';
+import { FaSearch, FaRegBookmark, FaRegThumbsUp, FaDownload, FaStreetView, FaShower, FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { AddCircle, AutoAwesome } from '@mui/icons-material';
+import { AddCircle, AutoAwesome, ViewCarousel, ViewList, ViewModule } from '@mui/icons-material';
+import axios from 'axios';
+import { AppContext } from '../../context/AppContext';
 
 const Notes = () => {
-  const [notes] = useState([
-    {
-      id: 1,
-      title: 'Introduction to React',
-      tags: ['React', 'JavaScript'],
-      author: 'John Doe',
-      thumbnail: '../public/react.png',
-    },
-    {
-      id: 2,
-      title: 'Machine Learning Basics',
-      tags: ['ML', 'AI'],
-      author: 'Jane Smith',
-      thumbnail: '../public/ml.jpeg',
-    },
-    // Add more notes here...
-  ]);
+  
+  const { backendUrl } = useContext(AppContext);
+  const [notes,setNotes] = useState([]);
+
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const { data } = await axios.get(`${backendUrl}/api/notes/getNotes`);
+        console.log(data?.data); 
+        setNotes(data.data || [])
+      } catch (error) {
+        console.error('Error fetching notes:', error);
+      }
+    };
+
+    fetchNotes();
+  }, [backendUrl]); 
+
+  
 
   const [selectedNote, setSelectedNote] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterTag, setFilterTag] = useState('');
 
   const filteredNotes = notes.filter((note) =>
+   
     note.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (filterTag ? note.tags.includes(filterTag) : true)
-  );
+);
 
   return (
     <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen">
@@ -88,25 +94,26 @@ const Notes = () => {
         </div>
 
         {/* Notes List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 bg-gradient-to-r from-background to-secondary-light md:grid-cols-2  lg:grid-cols-3 gap-8">
           {filteredNotes.map((note) => (
             <div
-              key={note.id}
-              className="bg-gradient-to-r from-background to-secondary-light border border-secondary-light p-4 rounded-lg shadow-md shadow-current hover:shadow-lg hover:shadow-current transition duration-300 cursor-pointer"
+              key={note._id}
+              className=" border border-secondary-light p-4 rounded-lg shadow-lg shadow-current hover:shadow-xl hover:shadow-current transition duration-300 cursor-pointer hover:scale-105"
               onClick={() => setSelectedNote(note)}
             >
-              <img src={note.thumbnail} alt={note.title} className="w-full h-40 object-cover rounded-t-md mb-2" />
+              
+              <img src={note.thumbnail} alt={note.title} className="w-40 h-40 object-cover rounded-t-md mb-2" />
               <h2 className="text-xl font-semibold text-primary-dark">{note.title}</h2>
               <p className="text-text-light mt-2">by {note.author}</p>
               <div className="mt-2">
-                {note.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="text-sm bg-secondary-light text-background px-2 py-1 rounded-full mr-2"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                  {note.tags.split(',').map((tag, index) => (
+                    <span
+                      key={index}
+                      className="text-sm bg-secondary-light text-primary px-2 py-1 rounded-full mr-2"
+                    >
+                      {tag.trim()}
+                    </span>
+                  ))}
               </div>
             </div>
           ))}
@@ -120,24 +127,24 @@ const Notes = () => {
                 &times;
               </button>
               <h2 className="text-2xl font-bold text-primary-dark mb-4">{selectedNote.title}</h2>
-              <p className="text-text mb-2">by {selectedNote.author}</p>
+              <p className="text-text mb-2">by {selectedNote.author}</p> 
               <div className="mb-4">
-                {selectedNote.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="text-sm bg-secondary-light text-background px-2 py-1 rounded-full mr-2"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+                  {selectedNote.tags.split(',').map((tag, index) => (
+                    <span
+                      key={index}
+                      className="text-sm bg-secondary-light text-primary px-2 py-1 rounded-full mr-2"
+                    >
+                      {tag.trim()}
+                    </span>
+                  ))}
+            </div>
               <p className="text-text mb-4">
                 {/* Sample content - Replace with actual note content */}
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a elementum mi. Duis eget cursus nibh.
+               {selectedNote.description}
               </p>
               <div className="flex items-center space-x-4">
-                <button className="flex items-center bg-primary-dark text-background px-4 py-2 rounded-md hover:bg-primary transition duration-300">
-                  <FaDownload className="mr-2" /> Download
+                <button className="flex items-center bg-primary-dark text-background px-4 py-2 rounded-md hover:bg-primary transition duration-300"  onClick={() => window.open(selectedNote.file, '_blank')}>
+                  <FaEye className="mr-2" /> View Notes
                 </button>
                 <button className="flex items-center text-primary hover:text-primary-dark transition duration-300">
                   <FaRegThumbsUp className="mr-1" /> Like

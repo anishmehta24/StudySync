@@ -7,6 +7,7 @@ import path from 'path';
 import notesModel from '../models/notes.model.js';
 import { upload } from '../middlewares/multer.middleware.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import userModel from '../models/user.model.js';
 
 dotenv.config({ path: './env' });
 
@@ -74,9 +75,9 @@ export const uploadNotes = async (req, res) => {
 
 
 
-export const getNotes = async(req,res) => {
-    
+// Get All Notes
 
+export const getNotes = async(req,res) => {
     try {
 
         const {title , tags} = req.query;
@@ -94,15 +95,29 @@ export const getNotes = async(req,res) => {
             };
         }
 
-        const data = await notesModel.find(query);
-        res.send({data:data})
-        
-    } catch (error) {
-        
-        console.log(error);
+        const notes = await notesModel.find(query);
 
-    }
+        // Add the `author` field for each note
+        const notesWithAuthors = await Promise.all(
+              notes.map(async (note) => {
+                  const user = await userModel.findById(note.uploadedBy).select("name");
+                  return {
+                      ...note._doc,
+                      author: user ? user.name : "Unknown", // Add author field
+                  };
+              })
+        );
+
+        res.status(200).send({ data: notesWithAuthors });
+      } catch (error) {
+          console.error(error);
+          res.status(500).send({ message: "Server error", error });
+      }
 }
+
+
+
+//get notes by userid
 export const getNotesByID = async(req,res) => {
     
     try {

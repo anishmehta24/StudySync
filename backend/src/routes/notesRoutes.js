@@ -10,7 +10,7 @@ notesRouter.post("/upload", upload.fields([
     { name: 'image', maxCount: 1 },
     { name: 'document', maxCount: 1 },
   ]),uploadNotes);
-notesRouter.get("/getFiles",getNotes);
+notesRouter.get("/getNotes",getNotes);
 notesRouter.get("/getFiles/:id",getNotesByID);
 
 
