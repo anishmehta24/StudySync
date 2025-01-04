@@ -1,5 +1,5 @@
 import express from 'express'
-import { getNotes, getNotesByID, uploadNotes } from '../controllers/notesController.js';
+import { generateNotes, getNotes, getNotesByID, uploadNotes } from '../controllers/notesController.js';
 import { upload } from '../middlewares/multer.middleware.js';
 // import { uploadNotes } from '../controllers/notesController.js';
 const notesRouter = express.Router();
@@ -12,6 +12,7 @@ notesRouter.post("/upload", upload.fields([
   ]),uploadNotes);
 notesRouter.get("/getNotes",getNotes);
 notesRouter.get("/getFiles/:id",getNotesByID);
+notesRouter.post("/generateNotes",generateNotes);
 
 
 export default notesRouter

@@ -1,8 +1,12 @@
 // src/components/Aigenerator.jsx
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Navbar from '../Navbar';
 import { TextField, ToggleButton, ToggleButtonGroup, Button, Box, Typography, Input } from '@mui/material';
 import { AutoAwesome, AutoFixHigh, Create, EmojiEmotions, EmojiObjects, Lightbulb, NoteAdd, } from '@mui/icons-material';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import DOMPurify from 'dompurify';
 
 
 const Aigenerator = () => {
@@ -12,15 +16,46 @@ const Aigenerator = () => {
   const [style, setStyle] = useState('Bullet Points');
   const [context, setContext] = useState('Exam Prep');
 
-  const handleGenerateNotes = () => {
-    // Trigger note generation process with input values
-    console.log({
-      topic,
-      keywords,
-      length,
-      style,
-      context
+  const [notes, setNotes] = useState(''); 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const { backendUrl } = useContext(AppContext);
+
+ 
+  
+  const handleGenerateNotes = async () => {
+    setLoading(true);
+    setNotes('');
+
+    const prompt = `
+  Generate ${length} notes on the topic: "${topic}".
+  Keywords or subtopics to cover: ${keywords}.
+  Format the notes in HTML format.
+  Provide additional context for ${context}.
+  Ensure the notes are clear, concise, and suitable for students preparing for this context.
+  Use proper HTML tags like <ul>, <li>, <b>, <p>, etc., for structuring the notes.
+  `;
+
+  try {
+
+    const response = await axios.post(`${backendUrl}/api/notes/generateNotes`, {
+      prompt,
     });
+
+    if (response) {
+      setNotes(response.data.data); 
+      console.log(response.data.data)// Assuming the backend returns { notes: '<HTML content>' }
+    } else {
+      toast.error('Failed to generate notes. Please try again.');
+    }
+    
+  } catch (error) {
+    toast.error("An error occurred while generating notes. Please try again.")
+  }finally{
+    setLoading(false);
+  }
+
   };
 
   return (
@@ -114,6 +149,20 @@ const Aigenerator = () => {
             </button>
 
           </div>
+
+          {loading && <p className="text-center mt-6">Generating notes...</p>}
+
+          {notes && (
+            <div className="mt-10 bg-white shadow-md p-6 rounded-lg">
+              <h2 className="text-xl font-semibold mb-4">Here is your Notes On:</h2>
+              <h3 className='text-3xl font-extrabold mb-4 flex justify-center text-primary'>{topic.toUpperCase()} : {context}</h3>
+              <div
+                
+                  dangerouslySetInnerHTML={{ __html:  DOMPurify.sanitize(notes)}}
+                  style={{ padding: "20px", border: "1px solid #ddd" }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -14,7 +14,7 @@ const Notes = () => {
     const fetchNotes = async () => {
       try {
         const { data } = await axios.get(`${backendUrl}/api/notes/getNotes`);
-        console.log(data?.data);
+        // console.log(data?.data);
         setNotes(data.data || []);
       } catch (error) {
         console.error('Error fetching notes:', error);
