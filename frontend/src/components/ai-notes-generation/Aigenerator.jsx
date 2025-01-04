@@ -1,12 +1,13 @@
-// src/components/Aigenerator.jsx
 import React, { useContext, useState } from 'react';
 import Navbar from '../Navbar';
 import { TextField, ToggleButton, ToggleButtonGroup, Button, Box, Typography, Input } from '@mui/material';
-import { AutoAwesome, AutoFixHigh, Create, EmojiEmotions, EmojiObjects, Lightbulb, NoteAdd, } from '@mui/icons-material';
+import { AutoAwesome, AutoFixHigh, ContentCopy, Create, Download, EmojiEmotions, EmojiObjects, Lightbulb, NoteAdd } from '@mui/icons-material';
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DOMPurify from 'dompurify';
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 
 const Aigenerator = () => {
@@ -22,48 +23,68 @@ const Aigenerator = () => {
 
   const { backendUrl } = useContext(AppContext);
 
- 
-  
   const handleGenerateNotes = async () => {
     setLoading(true);
     setNotes('');
 
-    const prompt = `
-  Generate ${length} notes on the topic: "${topic}".
-  Keywords or subtopics to cover: ${keywords}.
-  Format the notes in HTML format.
-  Provide additional context for ${context}.
-  Ensure the notes are clear, concise, and suitable for students preparing for this context.
-  Use proper HTML tags like <ul>, <li>, <b>, <p>, etc., for structuring the notes.
-  `;
+    const prompt =`
+      Generate ${length} notes on the topic: "${topic}".
+      Keywords or subtopics to cover: ${keywords}.
+      Format the notes in HTML format.
+      Provide additional context for ${context}.
+      Ensure the notes are clear, concise, and suitable for students preparing for this context.
+      Use proper HTML tags like <ul>, <li>, <b>, <p>, etc., for structuring the notes.`
 
-  try {
+    try {
+      const response = await axios.post(`${backendUrl}/api/notes/generateNotes`, {
+        prompt,
+      });
 
-    const response = await axios.post(`${backendUrl}/api/notes/generateNotes`, {
-      prompt,
-    });
-
-    if (response) {
-      setNotes(response.data.data); 
-      console.log(response.data.data)// Assuming the backend returns { notes: '<HTML content>' }
-    } else {
-      toast.error('Failed to generate notes. Please try again.');
+      if (response) {
+        setNotes(response.data.data); 
+        console.log(response.data.data)
+      } else {
+        toast.error('Failed to generate notes. Please try again.');
+      }
+    } catch (error) {
+      toast.error("An error occurred while generating notes. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    
-  } catch (error) {
-    toast.error("An error occurred while generating notes. Please try again.")
-  }finally{
-    setLoading(false);
-  }
-
   };
+
+  const downloadAsPDF = async () => {
+    const notesElement = document.querySelector("#notes-container"); // Ensure your notes section has this ID
+    if (!notesElement) {
+      toast.error("No notes to download!");
+      return;
+    }
+  
+    try {
+      const canvas = await html2canvas(notesElement, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+  
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${topic}_notes.pdf`);
+    } catch (error) {
+      toast.error("Failed to download notes as PDF!");
+      console.error(error);
+    }
+  };
+
+  
+  
 
   return (
     <div>
       <Navbar />
       <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen flex flex-col items-center justify-center px-6 py-10">
         <div className="text-center mb-12">
-          <h1  className="text-4xl font-extrabold text-primary-dark mb-4 text-center tracking-wide">
+          <h1 className="text-4xl font-extrabold text-primary-dark mb-4 text-center tracking-wide">
             Let's Create Your Notes
           </h1>
           <p className="text-text-light mt-2 text-lg">
@@ -72,9 +93,9 @@ const Aigenerator = () => {
         </div>
 
         <div className="bg-gradient-to-r from-background to-secondary-light shadow-2xl rounded-xl p-10 w-full max-w-3xl">
-          <h1  className="text-2xl font-bold text-primary-dark mb-10 text-center tracking-normal">
-      Enter Details to Generate Notes 
-       <span >  <AutoFixHigh className="text-primary-dark mb-2 ml-1" /></span>
+          <h1 className="text-2xl font-bold text-primary-dark mb-10 text-center tracking-normal">
+            Enter Details to Generate Notes 
+            <span> <AutoFixHigh className="text-primary-dark mb-2 ml-1" /></span>
           </h1>
 
           <div className="space-y-6">
@@ -140,14 +161,12 @@ const Aigenerator = () => {
             </div>
 
             <button
-                variant="contained"
-                onClick={handleGenerateNotes}
-                className="bg-primary text-background w-full font-bold py-4 rounded-lg mt-6 transform hover:scale-105 transition duration-300 shadow-md"
-                 // Adds the icon at the start of the text
+              variant="contained"
+              onClick={handleGenerateNotes}
+              className="bg-primary text-background w-full font-bold py-4 rounded-lg mt-6 transform hover:scale-105 transition duration-300 shadow-md"
             >
-                Generate Notes <AutoAwesome/>
+              Generate Notes <AutoAwesome />
             </button>
-
           </div>
 
           {loading && <p className="text-center mt-6">Generating notes...</p>}
@@ -155,12 +174,20 @@ const Aigenerator = () => {
           {notes && (
             <div className="mt-10 bg-white shadow-md p-6 rounded-lg">
               <h2 className="text-xl font-semibold mb-4">Here is your Notes On:</h2>
-              <h3 className='text-3xl font-extrabold mb-4 flex justify-center text-primary'>{topic.toUpperCase()} : {context}</h3>
-              <div
-                
-                  dangerouslySetInnerHTML={{ __html:  DOMPurify.sanitize(notes)}}
-                  style={{ padding: "20px", border: "1px solid #ddd" }}
+              <h3 className="text-3xl font-extrabold mb-4 flex justify-center text-primary">{topic.toUpperCase()} : {context}</h3>
+
+              
+
+              <div  id="notes-container"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(notes) }}
+                style={{ padding: "20px", border: "1px solid #ddd", overflowY: "auto", maxHeight: "500px" }}
               />
+               <div className="mt-6 flex justify-center gap-4">
+                <button onClick={downloadAsPDF} className="bg-secondary-dark flex text-primary px-6 py-2 rounded-lg">
+                 <Download className='mr-2 mt-1'/> Download Notes
+                </button>
+              
+              </div>
             </div>
           )}
         </div>
