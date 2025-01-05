@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Navbar from '../Navbar';
 import { TextField, ToggleButton, ToggleButtonGroup, Button, Box, Typography, Input } from '@mui/material';
-import { AutoAwesome, AutoFixHigh, ContentCopy, Create, Download, EmojiEmotions, EmojiObjects, Lightbulb, NoteAdd } from '@mui/icons-material';
+import { AutoAwesome, AutoFixHigh, ContentCopy, Create, Download, EmojiEmotions, EmojiObjects, Lightbulb, NoteAdd, Timer } from '@mui/icons-material';
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -24,6 +24,7 @@ const Aigenerator = () => {
   const { backendUrl } = useContext(AppContext);
 
   const handleGenerateNotes = async () => {
+    if(!topic || !keywords) {toast.error("Missing details"); return;}
     setLoading(true);
     setNotes('');
 
@@ -103,6 +104,7 @@ const Aigenerator = () => {
               label="Topic"
               variant="outlined"
               fullWidth
+              required
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="E.g., Quantum Physics, Basics of JavaScript"
@@ -160,19 +162,26 @@ const Aigenerator = () => {
               </ToggleButtonGroup>
             </div>
 
-            <button
+           { !loading && <button
               variant="contained"
               onClick={handleGenerateNotes}
               className="bg-primary text-background w-full font-bold py-4 rounded-lg mt-6 transform hover:scale-105 transition duration-300 shadow-md"
             >
               Generate Notes <AutoAwesome />
             </button>
+            }
           </div>
 
-          {loading && <p className="text-center mt-6">Generating notes...</p>}
+
+          {loading && <button
+              variant="contained"
+              className="bg-primary-light text-background w-full font-bold py-4 rounded-lg mt-6 transform  shadow-md"
+            >
+              Generating Your Notes...  <AutoAwesome />
+            </button>}
 
           {notes && (
-            <div className="mt-10 bg-white shadow-md p-6 rounded-lg">
+            <div className="mt-10 shadow-md shadow-current p-6 rounded-lg">
               <h2 className="text-xl font-semibold mb-4">Here is your Notes On:</h2>
               <h3 className="text-3xl font-extrabold mb-4 flex justify-center text-primary">{topic.toUpperCase()} : {context}</h3>
 
