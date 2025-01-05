@@ -97,14 +97,14 @@ const Community = () => {
         >
           <div className="flex justify-between items-start">
             <div>
-              <Link to={`/community/post/${post.id}`} className="text-2xl font-semibold text-primary-dark hover:underline">
+              <Link to={`/community/post/${post._id}`} className="text-2xl font-semibold text-primary-dark hover:underline">
                 {post.title}
               </Link>
-              <p className="text-sm text-gray-500 mt-1">• by {post.uploadedBy}</p>
+              <p className="text-sm text-gray-500 mt-1">Created At : {(post.createdAt).substring(0,10)} <br /> Asked By : {post.author}</p>
               <div className="flex gap-2 mt-2">
                
-                  <span className="bg-secondary-light text-background px-2 py-1 rounded-full text-xs font-semibold">
-                    {post.tag}
+                  <span className="bg-secondary-light text-primary-light px-2 py-1 rounded-full text-xs font-semibold">
+                    {post.tags}
                   </span>
                
               </div>
@@ -129,13 +129,13 @@ const Community = () => {
 
           <div className="flex justify-between items-center mt-4">
             <Link
-              to={`/community/post/${post.id}`}
+              to={`/community/post/${post._id}`}
               className="text-primary-dark flex items-center space-x-1 hover:text-secondary-dark font-semibold text-sm"
             >
               <FaCommentAlt /> <span>Add Reply</span>
             </Link>
             <Link
-              to={`/community/post/${post.id}`}
+              to={`/community/post/${post._id}`}
               className="text-secondary-dark hover:underline text-sm font-semibold"
             >
               {post.replies} Replies

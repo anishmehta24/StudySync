@@ -17,6 +17,7 @@ import EmailVerification from './components/EmailVerification';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UploadPost from './components/Community/UploadPost';
+import PostDetails from './components/Community/PostDetails';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
       <Route path="/notes" element={<Notes/>} />
       <Route path="/community" element={<Community/>} />
       <Route path="/community/new-post" element={<UploadPost/>} />
+      <Route path="/community/post/:id" element={<PostDetails/>} />
       <Route path="/groups" element={<Group/>} />
       {/* <Route path="/chat" element={<Chat/>} /> */}
       <Route path="/noticeboard" element={<NoticeBoard/>} />

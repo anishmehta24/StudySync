@@ -32,8 +32,14 @@ const postSchema = new mongoose.Schema({
     },
     
     comments: {
-        type: Array,
-        default: [],
+        type: [
+            {
+              text: { type: String, required: true },
+              user: { type: String,required:true }, 
+              createdAt: { type: Date, default: Date.now },
+            },
+          ],
+          default: [],
     },
 
 })

@@ -35,7 +35,7 @@ const UploadPost = () => {
       title: formData.title,
       description: formData.question,
       tags: formData.tags,
-      createdBy: userId,
+      user: userId,
     };
 
     const { data } = await axios.post(backendUrl + '/api/post/upload', postData);
