@@ -55,7 +55,7 @@ const Aigenerator = () => {
   };
 
   const downloadAsPDF = async () => {
-    const notesElement = document.querySelector("#notes-container"); // Ensure your notes section has this ID
+    const notesElement = document.querySelector("#notes-container");
     if (!notesElement) {
       toast.error("No notes to download!");
       return;

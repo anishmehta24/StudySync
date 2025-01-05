@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser"
 import authRouter from "./routes/authRoutes.js"
 import userRouter from "./routes/userRoutes.js"
 import notesRouter from "./routes/notesRoutes.js"
+import postRouter from "./routes/postRoutes.js"
 
 
 const app = express()
@@ -27,5 +28,6 @@ app.get("/",(req,res)=>
 app.use('/api/auth',authRouter);
 app.use('/api/user',userRouter);
 app.use('/api/notes',notesRouter);
+app.use('/api/post',postRouter);
 
 export {app}
