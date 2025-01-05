@@ -1,29 +1,32 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHeart, FaRegHeart, FaThumbsDown, FaCommentAlt, FaSearch, FaPlus } from 'react-icons/fa';
 import Navbar from '../Navbar';
 import { AddCircle } from '@mui/icons-material';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
 
-const samplePosts = [
-  {
-    id: 1,
-    title: 'How to learn React?',
-    content: 'I am new to React. Can someone suggest resources or tips for beginners?',
-    category: 'Computer Science',
-    tags: ['React', 'JavaScript'],
-    author: 'John Doe',
-    upvotes: 12,
-    downvotes: 2,
-    replies: 3,
-    liked: false,
-    disliked: false,
-  },
-  // Additional sample posts...
-];
+
 
 const Community = () => {
-  const [posts, setPosts] = useState(samplePosts);
+  const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const { backendUrl } = useContext(AppContext);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const { data } = await axios.get(`${backendUrl}/api/post/getPost`);
+        console.log(data?.data);
+        setPosts(data.data || []);
+      } catch (error) {
+        console.error('Error fetching notes:', error);
+      }
+    };
+
+    fetchPost();
+  }, [backendUrl]);
 
   const handleLike = (id) => {
     setPosts(posts.map(post => {
@@ -32,7 +35,7 @@ const Community = () => {
           ...post,
           liked: !post.liked,
           disliked: false,
-          upvotes: post.liked ? post.upvotes - 1 : post.upvotes + 1,
+          upvotes: post.liked ? post.downvotes - 1 : post.upvotes + 1,
         };
       }
       return post;
@@ -54,8 +57,7 @@ const Community = () => {
   };
 
   const filteredPosts = posts.filter(post =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.category.toLowerCase().includes(searchTerm.toLowerCase())
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()) 
   );
 
   return (
@@ -98,13 +100,13 @@ const Community = () => {
               <Link to={`/community/post/${post.id}`} className="text-2xl font-semibold text-primary-dark hover:underline">
                 {post.title}
               </Link>
-              <p className="text-sm text-gray-500 mt-1">Category: {post.category} • by {post.author}</p>
+              <p className="text-sm text-gray-500 mt-1">• by {post.uploadedBy}</p>
               <div className="flex gap-2 mt-2">
-                {post.tags.map((tag, index) => (
-                  <span key={index} className="bg-secondary-light text-background px-2 py-1 rounded-full text-xs font-semibold">
-                    {tag}
+               
+                  <span className="bg-secondary-light text-background px-2 py-1 rounded-full text-xs font-semibold">
+                    {post.tag}
                   </span>
-                ))}
+               
               </div>
             </div>
             <div className="flex space-x-3 items-center">
@@ -123,7 +125,7 @@ const Community = () => {
             </div>
           </div>
 
-          <p className="text-gray-700 mt-4">{post.content}</p>
+          <p className="text-gray-700 mt-4">{post.description}</p>
 
           <div className="flex justify-between items-center mt-4">
             <Link

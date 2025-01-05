@@ -16,6 +16,7 @@ import ResetPassword from './components/ResetPassword';
 import EmailVerification from './components/EmailVerification';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UploadPost from './components/Community/UploadPost';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/notes" element={<Notes/>} />
       <Route path="/community" element={<Community/>} />
+      <Route path="/community/new-post" element={<UploadPost/>} />
       <Route path="/groups" element={<Group/>} />
       {/* <Route path="/chat" element={<Chat/>} /> */}
       <Route path="/noticeboard" element={<NoticeBoard/>} />
