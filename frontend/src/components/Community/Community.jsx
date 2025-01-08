@@ -91,8 +91,8 @@ const Community = () => {
 
       {/* Posts List */}
       {filteredPosts.map((post) => (
-        <div
-          key={post.id}
+        <div 
+          key={post._id}
           className="bg-gradient-to-r from-background to-secondary-light p-5 rounded-lg shadow-md shadow-current hover:shadow-lg hover:shadow-current mb-5 ml-8 mr-8 border border-secondary  cursor-pointer"
         >
           <div className="flex justify-between items-start">
@@ -100,7 +100,7 @@ const Community = () => {
               <Link to={`/community/post/${post._id}`} className="text-2xl font-semibold text-primary-dark hover:underline">
                 {post.title}
               </Link>
-              <p className="text-sm text-gray-500 mt-1">Created At : {(post.createdAt).substring(0,10)} <br /> Asked By : {post.author}</p>
+              <p className="text-sm text-gray-500 mt-1">Created At :{new Date(post.createdAt).toLocaleDateString()}<br /> Asked By : {post.author}</p>
               <div className="flex gap-2 mt-2">
                
                   <span className="bg-secondary-light text-primary-light px-2 py-1 rounded-full text-xs font-semibold">
@@ -111,13 +111,13 @@ const Community = () => {
             </div>
             <div className="flex space-x-3 items-center">
               <button
-                onClick={() => handleLike(post.id)}
+                onClick={() => handleLike(post._id)}
                 className={`text-primary ${post.liked ? 'text-primary' : 'hover:text-secondary'}`}
               >
                 {post.liked ? <FaHeart /> : <FaRegHeart />} <span>{post.upvotes}</span>
               </button>
               <button
-                onClick={() => handleDislike(post.id)}
+                onClick={() => handleDislike(post._id)}
                 className={`text-primary ${post.disliked ? 'text-gray-500' : 'hover:text-secondary'}`}
               >
                 <FaThumbsDown /> <span>{post.downvotes}</span>
