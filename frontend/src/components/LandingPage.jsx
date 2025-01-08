@@ -23,7 +23,7 @@ const LandingPage = () => {
     <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen">
       <nav
         className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${
-          scrolled ? 'bg-gradient-to-r from-primary-light to-primary shadow-md' : 'bg-gradient-to-r from-background to-secondary-light shadow-md'
+          scrolled ? 'bg-gradient-to-r from-primary-light to-primary shadow-md' : 'bg-gradient-to-r from-background to-secondary-light shadow-md px-8'
         }`}
       >
         <div className="container mx-auto flex items-center justify-between py-4 px-6">

@@ -37,7 +37,7 @@ const Notes = () => {
     <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen">
       <Navbar />
 
-      <div className="container mx-auto py-16 px-10">
+      <div className="container mx-auto py-16 px-28">
         <div className="">
           <div className="text-center mb-8 shadow-md shadow-current rounded-xl">
             <h2 className="text-4xl font-extrabold text-primary-dark py-10 text-center tracking-wide">

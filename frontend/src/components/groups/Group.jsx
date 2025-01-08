@@ -23,7 +23,7 @@ const Group = () => {
   };
 
   const redirectToChatPage = () => {
-    window.location.href = '/chat';
+    window.location.href = '/'; //add in future
   };
 
   const redirectToNoticeBoard = () => {
