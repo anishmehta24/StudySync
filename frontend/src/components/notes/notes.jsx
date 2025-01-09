@@ -12,6 +12,8 @@ const Notes = () => {
 
   useEffect(() => {
     const fetchNotes = async () => {
+      axios.defaults.withCredentials = true
+        
       try {
         const { data } = await axios.get(`${backendUrl}/api/notes/getNotes`);
         // console.log(data?.data);

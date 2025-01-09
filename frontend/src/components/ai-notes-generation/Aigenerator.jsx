@@ -37,6 +37,7 @@ const Aigenerator = () => {
       Use proper HTML tags like <ul>, <li>, <b>, <p>, etc., for structuring the notes.`
 
     try {
+      axios.defaults.withCredentials = true
       const response = await axios.post(`${backendUrl}/api/notes/generateNotes`, {
         prompt,
       });

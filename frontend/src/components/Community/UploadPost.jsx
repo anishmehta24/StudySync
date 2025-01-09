@@ -37,7 +37,8 @@ const UploadPost = () => {
       tags: formData.tags,
       user: userId,
     };
-
+    axios.defaults.withCredentials = true
+        
     const { data } = await axios.post(backendUrl + '/api/post/upload', postData);
     if (data.success) {
       toast.success('Post Created Successfully');

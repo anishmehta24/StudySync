@@ -15,6 +15,8 @@ const PostDetails = () => {
   useEffect(() => {
     const fetchPostDetails = async () => {
       try {
+        axios.defaults.withCredentials = true
+        
         const { data } = await axios.get(`${backendUrl}/api/post/getPostById/${id}`);
         setPost(data.data);
         // console.log(data)

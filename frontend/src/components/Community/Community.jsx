@@ -15,6 +15,8 @@ const Community = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        axios.defaults.withCredentials = true
+        
         const { data } = await axios.get(`${backendUrl}/api/post/getPost`);
         console.log(data?.data);
         setPosts(data.data || []);

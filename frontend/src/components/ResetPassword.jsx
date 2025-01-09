@@ -53,6 +53,8 @@ const ForgotPassword = () => {
   // Step 1: Send OTP
   const handleSendOtp = async (e) => {
     e.preventDefault();
+    axios.defaults.withCredentials = true
+        
     try {
       const { data } = await axios.post(backendUrl + '/api/auth/send-reset-otp', { email });
       // console.log(data);
