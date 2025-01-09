@@ -10,10 +10,17 @@ import postRouter from "./routes/postRoutes.js"
 const app = express()
 
 
+const allowedOrigins = [process.env.CORS_ORIGIN, process.env.CORS_ORIGIN2,process.env.CORS_ORIGIN3];
 app.use(cors({
-    origin:process.env.CORS_ORIGIN,
-    credentials:true
-}))
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
 
 app.use(express.json({limit:"16kb"}))
 app.use(express.urlencoded({extended:true,limit:"16kb"}))
