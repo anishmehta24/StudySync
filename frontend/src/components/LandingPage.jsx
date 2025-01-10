@@ -127,12 +127,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-black py-6">
-        <div className="container mx-auto text-center text-white">
-          © 2024 StudySync. All rights reserved.
-        </div>
-      </footer>
+     
     </div>
   );
 };
