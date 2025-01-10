@@ -9,7 +9,6 @@ import postRouter from "./routes/postRoutes.js"
 
 const app = express()
 
-
 const allowedOrigins = [process.env.CORS_ORIGIN, process.env.CORS_ORIGIN2,process.env.CORS_ORIGIN3];
 
 app.use(cors({
@@ -22,12 +21,11 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.options('*', cors());
+
 app.use(express.json({limit:"16kb"}))
 app.use(express.urlencoded({extended:true,limit:"16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
-
 
 // API ENDPOINTS
 app.get("/",(req,res)=>
