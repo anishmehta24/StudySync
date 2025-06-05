@@ -56,12 +56,12 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section with larger video */}
-      <header className="container mx-auto mt-4 px-6 py-20 text-center md:text-left pt-28">
+      <header className="container mx-auto mt-16 px-6 py-20 text-center md:text-left pt-28">
         <div className="flex flex-col md:flex-row items-center justify-between">
           {/* Text Content */}
           <div className="md:w-1/2 ml-10">
             <h1 className="text-4xl font-bold text-black md:text-6xl">
-              Your Discipline, Our Community
+              Unlock the Power of Knowledge
             </h1>
             <p className="text-gray-700 mt-4 text-lg md:text-xl">
               Join our community of learners, share notes, get AI-powered summaries, and collaborate with others in real-time.
@@ -84,10 +84,12 @@ const LandingPage = () => {
 
           {/* Hero Video with increased width */}
           <div className="mt-10 md:mt-10 md:w-2/3 lg:w-3/4 flex justify-center">
-            <img
-              src="../public/group3.png"
-              className="w-full max-w-xl rounded-lg shadow-lg"
-              alt="Group 1"
+            <video
+              src="../public/hero-video.mp4"
+              autoPlay
+              muted
+              loop
+              className="w-full max-w-2xl rounded-lg shadow-lg"
             />
           </div>
         </div>
