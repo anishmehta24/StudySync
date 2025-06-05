@@ -9,10 +9,28 @@ import postRouter from "./routes/postRoutes.js"
 
 const app = express()
 
+const allowedOrigins =  [process.env.CORS_ORIGIN_1, process.env.CORS_ORIGIN_2, process.env.CORS_ORIGIN_3]; 
 
-app.use(cors());
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+const corsOption = {
+    origin: 
+      (origin, callback) => {
+          if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true); 
+          } else {
+            callback(new Error('Not allowed by CORS')); 
+          }
+        },
+    credentials: true,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    exposedHeaders: ['Content-Length', 'X-Response-Time']
+};
+
+app.use(cors(corsOption));
+
+app.use(express.json({limit:"16kb"}))
+app.use(express.urlencoded({extended:true,limit:"16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
