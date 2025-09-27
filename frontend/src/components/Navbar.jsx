@@ -1,14 +1,27 @@
 import { FaBars, FaCodepen, FaEllipsisV } from 'react-icons/fa';
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
-  const { userData, backendUrl, setUserData, setIsLoggedin } = useContext(AppContext);
+  const { userData, backendUrl, setUserData, setIsLoggedin, getUserData } = useContext(AppContext);
+  const profileRef = useRef(null)
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setIsProfileOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
   const sendVerificationOtp = async () => {
     try {
@@ -39,6 +52,23 @@ const Navbar = () => {
     }
   };
 
+  const NavItem = ({ to, label, end }) => (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) => `relative group text-lg font-medium transition px-1 py-1 ${isActive ? 'text-background' : 'hover:text-primary-light'}`}
+    >
+      {({ isActive }) => (
+        <>
+          <span>{label}</span>
+          <span
+            className={`pointer-events-none absolute left-0 -bottom-1 h-[4px] w-full origin-left transform rounded bg-background transition-transform duration-300 ease-out ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
+          />
+        </>
+      )}
+    </NavLink>
+  )
+
   return (
     <nav className="bg-gradient-to-r from-primary-light to-primary text-background py-4 px-8 shadow-md">
       <div className="container mx-auto flex items-center justify-between">
@@ -63,41 +93,74 @@ const Navbar = () => {
             isMenuOpen ? 'block' : 'hidden'
           } md:flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static bg-primary md:bg-transparent w-full md:w-auto top-full left-0 md:left-auto z-10 md:z-0 p-4 md:p-0`}
         >
-          <Link to="/dashboard" className="text-lg font-medium hover:text-primary-light transition">
-            Dashboard
-          </Link>
-          <Link to="/notes" className="text-lg font-medium hover:text-primary-light transition">
-            Notes
-          </Link>
-          <Link to="/community" className="text-lg font-medium hover:text-primary-light transition">
-            Community
-          </Link>
-          <Link to="/chat" className="text-lg font-medium hover:text-primary-light transition">
-            Chat
-          </Link>
-          <Link to="/noticeboard" className="text-lg font-medium hover:text-primary-light transition">
-            Notice Board
-          </Link>
+          <NavItem to="/dashboard" label="Dashboard" end />
+          <NavItem to="/notes" label="Notes" />
+          <NavItem to="/community" label="Community" />
+          <NavItem to="/chat" label="Chat" />
+          <NavItem to="/noticeboard" label="Notice Board" />
         </div>
 
         {/* User Profile */}
         <div className="px-4">
           {userData && (
-            <div className="w-10 h-10 flex justify-center items-center rounded-full bg-background text-primary-dark font-bold shadow hover:bg-primary-light hover:text-white transition hover:cursor-pointer relative group">
-              {userData?.name[0].toUpperCase()}
-              <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-primary rounded pt-10">
-                <ul className="list-none m-0 p-2 bg-background font-semibold text-sm rounded-lg">
+            <div ref={profileRef} className="relative">
+              <button
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded={isProfileOpen}
+                onClick={() => setIsProfileOpen((v) => !v)}
+                className="w-10 h-10 flex justify-center items-center rounded-full bg-background text-primary-dark font-bold shadow hover:bg-primary-light hover:text-white transition hover:cursor-pointer overflow-hidden"
+              >
+                {userData?.avatarUrl ? (
+                  <img src={userData.avatarUrl} alt={userData?.name || 'Profile'} className="w-full h-full object-cover" />
+                ) : (
+                  (userData?.name?.[0]?.toUpperCase() || 'U')
+                )}
+              </button>
+              <div className={`absolute right-0 top-12 z-20 text-primary rounded ${isProfileOpen ? 'block' : 'hidden'}`}>
+                <ul className="list-none m-0 p-2 bg-background font-semibold text-sm rounded-lg shadow-lg border border-gray-200 min-w-40">
                   {!userData.isAccountVerified && (
                     <li
-                      className="py-1 px-2 hover:bg-secondary-light hover:rounded-lg cursor-pointer"
-                      onClick={sendVerificationOtp}
+                      className="py-1 px-3 hover:bg-secondary-light hover:rounded-lg cursor-pointer"
+                      onClick={() => { setIsProfileOpen(false); sendVerificationOtp() }}
                     >
                       Verify Email
                     </li>
                   )}
+                  <li className="py-1 px-3 hover:bg-secondary-light hover:rounded-lg cursor-pointer">
+                    <label className="cursor-pointer block">
+                      Update Avatar
+                      <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                        try {
+                          const file = e.target.files?.[0]
+                          if (!file) return
+                          const form = new FormData()
+                          form.append('avatar', file)
+                          axios.defaults.withCredentials = true
+                          const { data } = await axios.post(backendUrl + '/api/user/avatar', form, {
+                            headers: { 'Content-Type': 'multipart/form-data' }
+                          })
+                          const url = data?.user?.avatarUrl
+                          if (data?.success && url) {
+                            setUserData((prev) => (prev ? { ...prev, avatarUrl: url } : prev))
+                            // Also refresh full user data for consistency
+                            try { await getUserData?.() } catch {}
+                            toast.success('Avatar updated')
+                          } else {
+                            toast.error(data?.message || 'Failed to update avatar')
+                          }
+                        } catch(err) {
+                          toast.error(err.message)
+                        } finally {
+                          e.target.value = ''
+                          setIsProfileOpen(false)
+                        }
+                      }} />
+                    </label>
+                  </li>
                   <li
-                    onClick={logout}
-                    className="py-1 px-2 hover:bg-secondary-light hover:rounded-lg cursor-pointer pr-10"
+                    onClick={() => { setIsProfileOpen(false); logout() }}
+                    className="py-1 px-3 hover:bg-secondary-light hover:rounded-lg cursor-pointer pr-10"
                   >
                     Logout
                   </li>

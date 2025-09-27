@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 const LandingPage = () => {
   const [scrolled, setScrolled] = useState(false);
 
+
   // Detect scroll to add background to navbar
   useEffect(() => {
     const handleScroll = () => {
@@ -78,12 +79,6 @@ const LandingPage = () => {
                 className="ml-4 bg-white text-black px-6 py-3 rounded-md text-lg font-semibold border border-gray-300 hover:bg-gray-200 transition duration-200"
               >
                 Learn More
-              </a>
-              <a
-                href="/chat"
-                className="ml-4 bg-primary text-background px-6 py-3 rounded-md text-lg font-semibold border border-primary hover:bg-primary-light transition duration-200"
-              >
-                Open Chat
               </a>
             </div>
           </div>

@@ -89,7 +89,7 @@ export const listConversations = async (req, res) => {
     conversations.forEach((c) => c.participants.forEach((p) => userIds.add(p.toString())));
     const users = await userModel
       .find({ _id: { $in: Array.from(userIds).map((id) => toObjectId(id)) } })
-      .select("name email avatar avatarUrl profileImage photo")
+  .select("name email avatarUrl")
       .lean();
     const userMap = new Map(users.map((u) => [u._id.toString(), u]));
 
