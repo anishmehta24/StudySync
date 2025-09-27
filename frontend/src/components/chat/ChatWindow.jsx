@@ -94,33 +94,31 @@ const ChatWindow = ({ conversationId, conversation, myId, onActivity }) => {
 
   const headerTitle = useMemo(() => {
     if (!conversation) return 'Conversation'
-    if (conversation.type === 'group') return conversation.name || 'Group'
+    if (conversation.type === 'group') return conversation.name || 'Group Chat'
     const others = conversation.participantProfiles?.filter?.(p => p && p._id !== myId)
     return others?.[0]?.name || others?.[0]?.email || 'Direct Chat'
   }, [conversation, myId])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div style={{ padding: 12, borderBottom: '1px solid #eee', fontWeight: 600 }}>{headerTitle}</div>
-      <div style={{ flex: 1, overflowY: 'auto', padding: 12 }} ref={listRef}>
+    <div className="h-full flex flex-col">
+      <div className="px-4 py-3 border-b border-gray-200 font-semibold text-primary-dark bg-white/70">{headerTitle}</div>
+      <div className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-white/70 to-secondary-light/40" ref={listRef}>
         {hasMore && (
-          <button onClick={loadMore} style={{ marginBottom: 12, padding: '6px 10px', border: '1px solid #ddd', borderRadius: 6 }}>Load earlier</button>
+          <button onClick={loadMore} className="mb-3 px-3 py-1.5 border rounded-md hover:bg-gray-50">Load earlier</button>
         )}
-        {messages.map((m) => (
-          <MessageBubble key={m._id} message={m} conversation={conversation} myId={myId} />
-        ))}
-        {isTyping && <div style={{ fontStyle: 'italic', color: '#777', marginTop: 8 }}>Typing…</div>}
+        <MessageList messages={messages} conversation={conversation} myId={myId} />
+        {isTyping && <div className="italic text-gray-500 mt-2">Typing…</div>}
       </div>
-      <div style={{ padding: 12, borderTop: '1px solid #eee', display: 'flex', gap: 8 }}>
+      <div className="px-3 py-3 border-t border-gray-200 flex gap-2 bg-white/70">
         <input
           value={text}
           onChange={(e) => { setText(e.target.value); setTyping(conversationId, true) }}
           onBlur={() => setTyping(conversationId, false)}
           placeholder="Type a message"
-          style={{ flex: 1, padding: 8, border: '1px solid #ddd', borderRadius: 6 }}
+          className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
         />
-        <input type="file" multiple onChange={handleUpload} />
-        <button onClick={handleSend} disabled={sending} style={{ padding: '6px 12px', border: '1px solid #ddd', borderRadius: 6 }}>Send</button>
+        <AttachmentButton onFiles={handleUpload} />
+        <button onClick={handleSend} disabled={sending} className="px-4 py-2 border rounded-md hover:bg-primary-light hover:text-white disabled:opacity-60">Send</button>
       </div>
     </div>
   )
@@ -145,35 +143,104 @@ const MessageBubble = ({ message: m, conversation, myId }) => {
     }
   }, [conversation, m.senderId, myId, mine])
 
-  const wrapperStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: mine ? 'flex-end' : 'flex-start',
-    margin: '10px 0',
-  }
-  const bubbleStyle = {
-    background: mine ? '#dcf8c6' : '#fff',
-    border: '1px solid #e6e6e6',
-    borderRadius: 12,
-    padding: '8px 10px',
-    maxWidth: '70%',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
-  }
-  const nameStyle = { fontSize: 12, color: '#666', marginBottom: 4 }
-  const timeStyle = { fontSize: 11, color: '#999', marginTop: 4 }
-
   return (
-    <div style={wrapperStyle}>
-      {senderProfile?.name && <div style={nameStyle}>{senderProfile.name}{senderProfile.email && conversation?.type === 'group' ? ` · ${senderProfile.email}` : ''}</div>}
-      {m.content && <div style={bubbleStyle}>{m.content}</div>}
+    <div className={`flex flex-col ${mine ? 'items-end' : 'items-start'} my-2`}>
+      {senderProfile?.name && (
+        <div className="text-xs text-gray-600 mb-1">
+          {senderProfile.name}
+          {senderProfile.email && conversation?.type === 'group' ? ` · ${senderProfile.email}` : ''}
+        </div>
+      )}
+      {m.content && (
+        <div className={`rounded-xl px-3 py-2 max-w-[70%] shadow ${mine ? 'bg-green-100 border border-green-200' : 'bg-white border border-gray-200'}`}>
+          {m.content}
+        </div>
+      )}
       {m.attachments?.length ? (
-        <div style={{ marginTop: 6, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <div className="mt-1 flex gap-2 flex-wrap">
           {m.attachments.map((a, i) => (
-            <a key={i} href={a.url} target="_blank" rel="noreferrer" style={{ fontSize: 12, color: '#2b6cb0' }}>{a.name || a.type}</a>
+            <a key={i} href={a.url} target="_blank" rel="noreferrer" className="text-xs text-blue-700 hover:underline">{a.name || a.type}</a>
           ))}
         </div>
       ) : null}
-      <div style={timeStyle}>{new Date(m.createdAt).toLocaleString()}</div>
+      <div className="text-[11px] text-gray-500 mt-1">{formatTimeOnly(m.createdAt)}</div>
     </div>
+  )
+}
+
+// Date grouping list
+const MessageList = ({ messages, conversation, myId }) => {
+  const groups = []
+  let lastKey = ''
+  for (const m of messages) {
+    const k = dateKey(m.createdAt)
+    if (k !== lastKey) {
+      groups.push({ type: 'separator', key: k })
+      lastKey = k
+    }
+    groups.push({ type: 'message', data: m })
+  }
+  return (
+    <>
+      {groups.map((g, idx) => g.type === 'separator' ? (
+        <DateSeparator key={`sep-${g.key}-${idx}`} date={g.key} />
+      ) : (
+        <MessageBubble key={g.data._id} message={g.data} conversation={conversation} myId={myId} />
+      ))}
+    </>
+  )
+}
+
+const DateSeparator = ({ date }) => (
+  <div className="flex items-center my-3">
+    <div className="flex-1 h-px bg-gray-200" />
+    <div className="px-3 text-xs text-gray-600">{humanDate(date)}</div>
+    <div className="flex-1 h-px bg-gray-200" />
+  </div>
+)
+
+const dateKey = (d) => {
+  const x = new Date(d)
+  const y = x.getFullYear()
+  const m = String(x.getMonth() + 1).padStart(2, '0')
+  const dd = String(x.getDate()).padStart(2, '0')
+  return `${y}-${m}-${dd}`
+}
+const todayKey = () => dateKey(new Date())
+const yesterdayKey = () => {
+  const t = new Date()
+  t.setDate(t.getDate() - 1)
+  return dateKey(t)
+}
+const humanDate = (key) => {
+  if (key === todayKey()) return 'Today'
+  if (key === yesterdayKey()) return 'Yesterday'
+  // Convert key back to Date at local midnight for display
+  const [y, m, d] = key.split('-').map(Number)
+  const local = new Date(y, (m || 1) - 1, d || 1)
+  return local.toLocaleDateString()
+}
+const formatTimeOnly = (d) => {
+  try {
+    const date = new Date(d)
+    const hh = date.getHours()
+    const mm = String(date.getMinutes()).padStart(2, '0')
+    const ampm = hh >= 12 ? 'PM' : 'AM'
+    const h = ((hh + 11) % 12) + 1
+    return `${h}:${mm} ${ampm}`
+  } catch { return '' }
+}
+
+const AttachmentButton = ({ onFiles }) => {
+  const inputRef = useRef(null)
+  const click = () => inputRef.current?.click()
+  const onChange = (e) => onFiles?.(e)
+  return (
+    <>
+      <button type="button" onClick={click} className="px-3 py-2 border rounded-md hover:bg-gray-50" aria-label="Add attachment" title="Add attachment">
+        📎
+      </button>
+      <input ref={inputRef} type="file" multiple onChange={onChange} className="hidden" />
+    </>
   )
 }

@@ -6,7 +6,6 @@ import Aigenerator from './components/ai-notes-generation/Aigenerator'
 import theme from './theme'
 import { ThemeProvider } from '@mui/material'
 import Community from './components/Community/Community'
-import Group from './components/groups/Group'
 import NoticeBoard from './components/noticeboard/Notice'
 import LandingPage from './components/LandingPage';
 import Dashboard from './components/Dashboard';
@@ -41,7 +40,7 @@ function App() {
       <Route path="/community" element={<Community/>} />
       <Route path="/community/new-post" element={<UploadPost/>} />
       <Route path="/community/post/:id" element={<PostDetails/>} />
-  <Route path="/groups" element={<Group/>} />
+  {/* Groups route removed; chat is the single entry point */}
   <Route path="/chat" element={<Chat/>} />
       <Route path="/noticeboard" element={<NoticeBoard/>} />
       <Route path="/ai-note-generation" element={<Aigenerator/>} />

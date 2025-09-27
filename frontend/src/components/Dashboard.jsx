@@ -26,10 +26,10 @@ const Dashboard = () => {
       icon: <FaUsers className="text-primary text-4xl" />,
     },
     {
-      title: 'Group Study Finder',
-      description: 'Find study groups based on subjects or interests.',
-      link: '/groups',
-      icon: <FaChalkboard className="text-primary text-4xl" />,
+      title: 'Chat',
+      description: 'Direct messages and group chats, all in one place.',
+      link: '/chat',
+      icon: <FaComments className="text-primary text-4xl" />,
     },
     {
       title: 'Direct Messages & Group Chat',

@@ -72,8 +72,8 @@ const Navbar = () => {
           <Link to="/community" className="text-lg font-medium hover:text-primary-light transition">
             Community
           </Link>
-          <Link to="/groups" className="text-lg font-medium hover:text-primary-light transition">
-            Groups
+          <Link to="/chat" className="text-lg font-medium hover:text-primary-light transition">
+            Chat
           </Link>
           <Link to="/noticeboard" className="text-lg font-medium hover:text-primary-light transition">
             Notice Board

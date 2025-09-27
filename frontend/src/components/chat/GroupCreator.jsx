@@ -35,11 +35,11 @@ const GroupCreator = ({ onClose, onCreated }) => {
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ background: '#fff', borderRadius: 8, width: 560, padding: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>Create Group</div>
+          <div style={{ fontWeight: 700, fontSize: 18 }}>Create Group Chat</div>
           <button onClick={onClose} style={{ border: 'none', background: 'transparent', fontSize: 20 }}>×</button>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <input value={name} onChange={e => setName(e.target.value)} placeholder="Group name" style={{ padding: 8, border: '1px solid #ddd', borderRadius: 6 }} />
+          <input value={name} onChange={e => setName(e.target.value)} placeholder="Group Chat name" style={{ padding: 8, border: '1px solid #ddd', borderRadius: 6 }} />
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search users by name or email" style={{ padding: 8, border: '1px solid #ddd', borderRadius: 6 }} />
           <div style={{ display: 'flex', gap: 12 }}>
             <div style={{ flex: 1, border: '1px solid #eee', borderRadius: 6, padding: 8, maxHeight: 240, overflowY: 'auto' }}>
@@ -69,7 +69,7 @@ const GroupCreator = ({ onClose, onCreated }) => {
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
             <button onClick={onClose} style={{ padding: '6px 12px', border: '1px solid #ddd', borderRadius: 6 }}>Cancel</button>
-            <button onClick={create} disabled={loading} style={{ padding: '6px 12px', border: '1px solid #ddd', borderRadius: 6, background: '#111', color: '#fff' }}>Create Group</button>
+            <button onClick={create} disabled={loading} style={{ padding: '6px 12px', border: '1px solid #ddd', borderRadius: 6, background: '#111', color: '#fff' }}>Create Group Chat</button>
           </div>
         </div>
       </div>
