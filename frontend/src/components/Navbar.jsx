@@ -43,7 +43,7 @@ const Navbar = () => {
     <nav className="bg-gradient-to-r from-primary-light to-primary text-background py-4 px-8 shadow-md">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="text-3xl flex font-extrabold text-background px-6">
+        <Link to="/dashboard" className="text-3xl flex font-extrabold text-background px-6">
           <FaCodepen className="mr-3 mt-1" /> StudySync
         </Link>
 
