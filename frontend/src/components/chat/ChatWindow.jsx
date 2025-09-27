@@ -9,8 +9,9 @@ const ChatWindow = ({ conversationId, conversation, myId, onActivity }) => {
   const [hasMore, setHasMore] = useState(true)
   const [text, setText] = useState('')
   const [sending, setSending] = useState(false)
-  const [isTyping, setIsTyping] = useState(false)
+  const [typingUsers, setTypingUsers] = useState({}) // { userId: timeoutId }
   const listRef = useRef(null)
+  const topSentinelRef = useRef(null)
 
   const loadMessages = async (p = 1) => {
     const res = await ChatApi.getMessages(conversationId, p, 30)
@@ -39,9 +40,21 @@ const ChatWindow = ({ conversationId, conversation, myId, onActivity }) => {
       scrollToBottom()
     }
     const onTyping = ({ conversationId: cid, userId, isTyping }) => {
-      if (cid !== conversationId) return
-      setIsTyping(!!isTyping)
-      if (isTyping) setTimeout(() => setIsTyping(false), 2000)
+      if (cid !== conversationId || String(userId) === String(myId)) return
+      setTypingUsers((prev) => {
+        const next = { ...prev }
+        if (isTyping) {
+          // clear any existing timeout
+          if (next[userId]?.t) clearTimeout(next[userId].t)
+          next[userId] = { t: setTimeout(() => {
+            setTypingUsers((p2) => { const n = { ...p2 }; delete n[userId]; return n })
+          }, 2000) }
+        } else {
+          if (next[userId]?.t) clearTimeout(next[userId].t)
+          delete next[userId]
+        }
+        return next
+      })
     }
     const onRead = ({ conversationId: cid }) => {
       if (cid !== conversationId) return
@@ -88,9 +101,27 @@ const ChatWindow = ({ conversationId, conversation, myId, onActivity }) => {
     e.target.value = ''
   }
 
-  const loadMore = () => {
-    if (hasMore) loadMessages(page + 1)
-  }
+  const loadMore = () => { if (hasMore) loadMessages(page + 1) }
+
+  // Infinite scroll: when top sentinel is visible, load more
+  useEffect(() => {
+    const el = listRef.current
+    if (!el) return
+    const handler = () => {
+      if (el.scrollTop <= 16 && hasMore) loadMore()
+    }
+    el.addEventListener('scroll', handler)
+    return () => el.removeEventListener('scroll', handler)
+  }, [hasMore, page])
+
+  // Mark-as-read when viewing latest messages
+  useEffect(() => {
+    if (!messages.length) return
+    const unreadIds = messages.filter(m => String(m.senderId) !== String(myId) && !(m.readBy||[]).includes(myId)).map(m => m._id)
+    if (!unreadIds.length) return
+    // fire and forget
+    ChatApi.markAsRead({ conversationId, messageIds: unreadIds }).catch(() => {})
+  }, [messages, conversationId, myId])
 
   const headerTitle = useMemo(() => {
     if (!conversation) return 'Conversation'
@@ -104,10 +135,14 @@ const ChatWindow = ({ conversationId, conversation, myId, onActivity }) => {
       <div className="px-4 py-3 border-b border-gray-200 font-semibold text-primary-dark bg-white/70">{headerTitle}</div>
       <div className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-white/70 to-secondary-light/40" ref={listRef}>
         {hasMore && (
-          <button onClick={loadMore} className="mb-3 px-3 py-1.5 border rounded-md hover:bg-gray-50">Load earlier</button>
+          <div className="text-center text-xs text-gray-500 mb-2">Scroll up to load earlier…</div>
         )}
         <MessageList messages={messages} conversation={conversation} myId={myId} />
-        {isTyping && <div className="italic text-gray-500 mt-2">Typing…</div>}
+        {Object.keys(typingUsers).length > 0 && (
+          <div className="italic text-gray-500 mt-2 text-sm">
+            {Object.keys(typingUsers).length === 1 ? 'Someone is typing…' : 'Several people are typing…'}
+          </div>
+        )}
       </div>
       <div className="px-3 py-3 border-t border-gray-200 flex gap-2 bg-white/70">
         <input

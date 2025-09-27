@@ -89,14 +89,27 @@ export const listConversations = async (req, res) => {
     conversations.forEach((c) => c.participants.forEach((p) => userIds.add(p.toString())));
     const users = await userModel
       .find({ _id: { $in: Array.from(userIds).map((id) => toObjectId(id)) } })
-      .select("name email")
+      .select("name email avatar avatarUrl profileImage photo")
       .lean();
     const userMap = new Map(users.map((u) => [u._id.toString(), u]));
 
-    const result = conversations.map((c) => ({
-      ...c,
-      participantProfiles: c.participants.map((pid) => userMap.get(pid.toString()) || null),
-    }));
+    // Compute unread counts per conversation (messages not read by me and not sent by me)
+    const result = []
+    for (const c of conversations) {
+      let unreadCount = 0
+      try {
+        unreadCount = await chatMessageModel.countDocuments({
+          conversationId: c._id,
+          readBy: { $ne: toObjectId(userId) },
+          senderId: { $ne: toObjectId(userId) },
+        })
+      } catch {}
+      result.push({
+        ...c,
+        unreadCount,
+        participantProfiles: c.participants.map((pid) => userMap.get(pid.toString()) || null),
+      })
+    }
 
     return res.json({ success: true, conversations: result });
   } catch (error) {

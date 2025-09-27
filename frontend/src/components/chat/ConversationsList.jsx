@@ -18,6 +18,8 @@ const ConversationsList = ({ conversations, activeId, onSelect, myId }) => {
     } catch { return '' }
   }
 
+  const getAvatarUrl = (profile) => profile?.avatarUrl || profile?.avatar || profile?.profileImage || profile?.photo || ''
+
   return (
     <div className="overflow-y-auto h-full">
       {conversations.map((c) => {
@@ -37,18 +39,20 @@ const ConversationsList = ({ conversations, activeId, onSelect, myId }) => {
           const text = last.content && last.content.length ? last.content : '[Attachment]'
           subtitle = `${mine ? 'You: ' : ''}${text}`
         }
-        // basic unread: if last message isn't read by me and not mine -> 1
-        const unread = last && Array.isArray(last.readBy) && !last.readBy.includes(myId) && String(last.senderId) !== String(myId) ? 1 : 0
+        // prefer backend computed unreadCount, fallback to simple calc
+        const unread = typeof c.unreadCount === 'number' ? c.unreadCount : (last && Array.isArray(last.readBy) && !last.readBy.includes(myId) && String(last.senderId) !== String(myId) ? 1 : 0)
         const time = last ? formatTime(last.createdAt) : ''
 
         // avatar initial
         let avatarInitial = 'C'
+        let avatarUrl = ''
         if (c.type === 'group') {
           avatarInitial = getInitials(title)
         } else {
           const others = c.participantProfiles?.filter(p => p && p._id !== myId)
           const other = others && others[0]
           avatarInitial = other?.name ? getInitials(other.name) : (other?.email?.[0] || 'U').toUpperCase()
+          avatarUrl = getAvatarUrl(other)
         }
         return (
           <div
@@ -57,9 +61,13 @@ const ConversationsList = ({ conversations, activeId, onSelect, myId }) => {
             className={`p-3 cursor-pointer border-b border-gray-100 ${isActive ? 'bg-secondary-light/40' : 'hover:bg-gray-50'}`}
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary-light text-white flex items-center justify-center font-bold">
-                {avatarInitial}
-              </div>
+              {avatarUrl ? (
+                <img src={avatarUrl} alt={title} className={`w-10 h-10 rounded-full object-cover ${c.type === 'group' ? 'ring-2 ring-purple-300' : ''}`} />
+              ) : (
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${c.type === 'group' ? 'bg-purple-500' : 'bg-primary-light'}`}>
+                  {c.type === 'group' ? '👥' : avatarInitial}
+                </div>
+              )}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
                   <div className="font-semibold text-primary-dark truncate">{title}</div>
