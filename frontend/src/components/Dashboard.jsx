@@ -31,6 +31,12 @@ const Dashboard = () => {
       link: '/groups',
       icon: <FaChalkboard className="text-primary text-4xl" />,
     },
+    {
+      title: 'Direct Messages & Group Chat',
+      description: 'Chat 1:1 or in groups with classmates, share files and coordinate.',
+      link: '/chat',
+      icon: <FaComments className="text-primary text-4xl" />,
+    },
   ];
 
   return (
