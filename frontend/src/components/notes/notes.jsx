@@ -39,7 +39,7 @@ const Notes = () => {
     <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen">
       <Navbar />
 
-      <div className="container mx-auto py-16 px-28">
+  <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-10 xl:px-20">
         <div className="">
           <div className="text-center mb-8 shadow-md shadow-current rounded-xl">
             <h2 className="text-4xl font-extrabold text-primary-dark py-10 text-center tracking-wide">
@@ -56,7 +56,7 @@ const Notes = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-center mt-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mt-4 mb-8">
           <h1 className="text-3xl font-bold text-primary-dark text-center tracking-normal">Featured Notes</h1>
           <Link to="/ai-note-generation">
             <button className="bg-primary-dark text-background px-4 py-2 rounded-md hover:scale-105 transition duration-100">
@@ -66,8 +66,8 @@ const Notes = () => {
         </div>
 
         {/* Search and Filter */}
-        <div className="flex items-center mb-6">
-          <div className="relative flex items-center border border-primary-light rounded-md w-1/2 md:w-1/3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
+          <div className="relative flex items-center border border-primary-light rounded-md w-full sm:w-1/2 md:w-1/3">
             <FaSearch className="absolute left-3 text-primary-light" />
             <input
               type="text"
@@ -78,7 +78,7 @@ const Notes = () => {
             />
           </div>
           <select
-            className="ml-4 border border-primary-light px-4 py-2 rounded-md"
+            className="border border-primary-light px-4 py-2 rounded-md sm:ml-4"
             value={filterTag}
             onChange={(e) => setFilterTag(e.target.value)}
           >
@@ -92,7 +92,7 @@ const Notes = () => {
         </div>
 
         {/* Notes List */}
-        <div className="grid grid-cols-1 bg-gradient-to-r from-background to-secondary-light md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 bg-gradient-to-r from-background to-secondary-light sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {filteredNotes.map((note) => (
             <div
               key={note._id}

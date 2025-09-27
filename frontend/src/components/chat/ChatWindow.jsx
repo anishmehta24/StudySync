@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { ChatApi } from '../../api/chatApi'
 import { SocketContext } from '../../context/SocketContext'
 
-const ChatWindow = ({ conversationId, conversation, myId, onActivity }) => {
+const ChatWindow = ({ conversationId, conversation, myId, onActivity, onBack }) => {
   const { socket, joinConversation, leaveConversation, sendSocketMessage, setTyping } = useContext(SocketContext)
   const [messages, setMessages] = useState([])
   const [page, setPage] = useState(1)
@@ -132,8 +132,15 @@ const ChatWindow = ({ conversationId, conversation, myId, onActivity }) => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="px-4 py-3 border-b border-gray-200 font-semibold text-primary-dark bg-white/70">{headerTitle}</div>
-      <div className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-white/70 to-secondary-light/40" ref={listRef}>
+      <div className="px-4 py-3 border-b border-gray-200 font-semibold text-primary-dark bg-white/70 flex items-center gap-2">
+        {onBack && (
+          <button onClick={onBack} className="md:hidden mr-1 px-2 py-1 rounded border hover:bg-gray-50" aria-label="Back to conversations">
+            ←
+          </button>
+        )}
+        <div className="truncate">{headerTitle}</div>
+      </div>
+      <div className="flex-1 overflow-y-auto p-3 md:p-4 bg-gradient-to-b from-white/70 to-secondary-light/40" ref={listRef}>
         {hasMore && (
           <div className="text-center text-xs text-gray-500 mb-2">Scroll up to load earlier…</div>
         )}
@@ -144,13 +151,13 @@ const ChatWindow = ({ conversationId, conversation, myId, onActivity }) => {
           </div>
         )}
       </div>
-      <div className="px-3 py-3 border-t border-gray-200 flex gap-2 bg-white/70">
+      <div className="px-3 py-3 border-t border-gray-200 flex flex-wrap gap-2 bg-white/70">
         <input
           value={text}
           onChange={(e) => { setText(e.target.value); setTyping(conversationId, true) }}
           onBlur={() => setTyping(conversationId, false)}
           placeholder="Type a message"
-          className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
+          className="min-w-0 flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light"
         />
         <AttachmentButton onFiles={handleUpload} />
         <button onClick={handleSend} disabled={sending} className="px-4 py-2 border rounded-md hover:bg-primary-light hover:text-white disabled:opacity-60">Send</button>

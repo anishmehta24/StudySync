@@ -32,44 +32,46 @@ const GroupCreator = ({ onClose, onCreated }) => {
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ background: '#fff', borderRadius: 8, width: 560, padding: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>Create Group Chat</div>
-          <button onClick={onClose} style={{ border: 'none', background: 'transparent', fontSize: 20 }}>×</button>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg w-full max-w-xl md:max-w-2xl p-4 md:p-5 shadow-xl">
+        <div className="flex items-center justify-between mb-3">
+          <div className="font-bold text-lg">Create Group Chat</div>
+          <button onClick={onClose} className="text-xl leading-none px-2">×</button>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <input value={name} onChange={e => setName(e.target.value)} placeholder="Group Chat name" style={{ padding: 8, border: '1px solid #ddd', borderRadius: 6 }} />
-          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search users by name or email" style={{ padding: 8, border: '1px solid #ddd', borderRadius: 6 }} />
-          <div style={{ display: 'flex', gap: 12 }}>
-            <div style={{ flex: 1, border: '1px solid #eee', borderRadius: 6, padding: 8, maxHeight: 240, overflowY: 'auto' }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Results</div>
+        <div className="flex flex-col gap-3">
+          <input value={name} onChange={e => setName(e.target.value)} placeholder="Group Chat name" className="px-3 py-2 border rounded-md" />
+          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search users by name or email" className="px-3 py-2 border rounded-md" />
+          <div className="flex flex-col md:flex-row gap-3">
+            <div className="flex-1 border rounded-md p-2 max-h-60 overflow-y-auto">
+              <div className="font-semibold mb-2">Results</div>
               {results.map(u => (
-                <div key={u._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 4px', borderBottom: '1px solid #f3f3f3' }}>
+                <div key={u._id} className="flex items-center justify-between py-1.5 border-b last:border-b-0">
                   <div>
-                    <div style={{ fontWeight: 600 }}>{u.name}</div>
-                    <div style={{ color: '#666', fontSize: 12 }}>{u.email}</div>
+                    <div className="font-medium">{u.name}</div>
+                    <div className="text-xs text-gray-600">{u.email}</div>
                   </div>
-                  <button onClick={() => addUser(u)} style={{ padding: '4px 8px', border: '1px solid #ddd', borderRadius: 6 }}>Add</button>
+                  <button onClick={() => addUser(u)} className="px-2 py-1 border rounded-md hover:bg-gray-50">Add</button>
                 </div>
               ))}
+              {!results.length && <div className="text-sm text-gray-600">Type to search users…</div>}
             </div>
-            <div style={{ flex: 1, border: '1px solid #eee', borderRadius: 6, padding: 8, maxHeight: 240, overflowY: 'auto' }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Selected</div>
+            <div className="flex-1 border rounded-md p-2 max-h-60 overflow-y-auto">
+              <div className="font-semibold mb-2">Selected</div>
               {selected.map(u => (
-                <div key={u._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 4px', borderBottom: '1px solid #f3f3f3' }}>
+                <div key={u._id} className="flex items-center justify-between py-1.5 border-b last:border-b-0">
                   <div>
-                    <div style={{ fontWeight: 600 }}>{u.name}</div>
-                    <div style={{ color: '#666', fontSize: 12 }}>{u.email}</div>
+                    <div className="font-medium">{u.name}</div>
+                    <div className="text-xs text-gray-600">{u.email}</div>
                   </div>
-                  <button onClick={() => removeUser(u._id)} style={{ padding: '4px 8px', border: '1px solid #ddd', borderRadius: 6 }}>Remove</button>
+                  <button onClick={() => removeUser(u._id)} className="px-2 py-1 border rounded-md hover:bg-gray-50">Remove</button>
                 </div>
               ))}
+              {!selected.length && <div className="text-sm text-gray-600">No users selected.</div>}
             </div>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-            <button onClick={onClose} style={{ padding: '6px 12px', border: '1px solid #ddd', borderRadius: 6 }}>Cancel</button>
-            <button onClick={create} disabled={loading} style={{ padding: '6px 12px', border: '1px solid #ddd', borderRadius: 6, background: '#111', color: '#fff' }}>Create Group Chat</button>
+          <div className="flex justify-end gap-2">
+            <button onClick={onClose} className="px-3 py-2 border rounded-md">Cancel</button>
+            <button onClick={create} disabled={loading} className="px-3 py-2 border rounded-md bg-black text-white disabled:opacity-60">Create Group Chat</button>
           </div>
         </div>
       </div>

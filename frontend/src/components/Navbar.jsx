@@ -70,10 +70,10 @@ const Navbar = () => {
   )
 
   return (
-    <nav className="bg-gradient-to-r from-primary-light to-primary text-background py-4 px-8 shadow-md">
+    <nav className="bg-gradient-to-r from-primary-light to-primary text-background py-4 px-4 sm:px-6 shadow-md">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
-        <Link to="/dashboard" className="text-3xl flex font-extrabold text-background px-6">
+        <Link to="/dashboard" className="text-2xl sm:text-3xl flex font-extrabold text-background px-2 sm:px-6">
           <FaCodepen className="mr-3 mt-1" /> StudySync
         </Link>
 
@@ -89,9 +89,7 @@ const Navbar = () => {
 
         {/* Menu Options */}
         <div
-          className={`${
-            isMenuOpen ? 'block' : 'hidden'
-          } md:flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static bg-primary md:bg-transparent w-full md:w-auto top-full left-0 md:left-auto z-10 md:z-0 p-4 md:p-0`}
+          className={`${isMenuOpen ? 'block' : 'hidden'} md:flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static bg-primary md:bg-transparent w-full md:w-auto top-full left-0 md:left-auto z-30 md:z-auto p-4 md:p-0`}
         >
           <NavItem to="/dashboard" label="Dashboard" end />
           <NavItem to="/notes" label="Notes" />

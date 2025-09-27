@@ -13,6 +13,8 @@ const Chat = () => {
   const [activeId, setActiveId] = useState(null)
   const [showGroup, setShowGroup] = useState(false)
   const [showDirect, setShowDirect] = useState(false)
+  const [isMdUp, setIsMdUp] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true)
+  const [mobileView, setMobileView] = useState('list') // 'list' | 'chat' for < md
   const { userData } = useContext(AppContext)
   const { socket, joinConversation } = useContext(SocketContext)
 
@@ -27,6 +29,13 @@ const Chat = () => {
   }
 
   useEffect(() => { loadConversations() }, [])
+
+  // Track viewport to switch between mobile/desktop behavior
+  useEffect(() => {
+    const handler = () => setIsMdUp(window.innerWidth >= 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
 
   // Refresh list when new messages arrive in any conversation
   useEffect(() => {
@@ -49,9 +58,9 @@ const Chat = () => {
           <p className="text-gray-700">Direct messages and group chats with your classmates.</p>
         </div>
 
-        <div className="bg-white/90 rounded-xl shadow-lg shadow-current flex overflow-hidden min-h-[78vh]">
+        <div className="bg-white/90 rounded-xl shadow-lg shadow-current flex flex-col md:flex-row overflow-hidden min-h-[78vh]">
           {/* Conversations panel */}
-          <div className="w-80 border-r border-gray-200 flex flex-col">
+          <div className={`border-b md:border-b-0 md:border-r border-gray-200 flex flex-col ${isMdUp ? 'w-80' : 'w-full'} ${!isMdUp && mobileView !== 'list' ? 'hidden' : ''}`}>
             <div className="p-3 flex gap-3 items-center">
               <button className="w-9 h-9 rounded-full border flex items-center justify-center hover:bg-gray-50" title="New chat" onClick={() => setShowDirect(true)}>
                 💬
@@ -65,18 +74,24 @@ const Chat = () => {
             </div>
             <div className="border-t border-gray-100" />
             <div className="flex-1 min-h-0">
-              <ConversationsList conversations={conversations} activeId={activeId} onSelect={setActiveId} myId={userData?.id} />
+              <ConversationsList
+                conversations={conversations}
+                activeId={activeId}
+                onSelect={(id) => { setActiveId(id); if (!isMdUp) setMobileView('chat') }}
+                myId={userData?.id}
+              />
             </div>
           </div>
 
           {/* Active chat */}
-          <div className="flex-1 min-w-0">
+          <div className={`flex-1 min-w-0 ${!isMdUp && mobileView !== 'chat' ? 'hidden' : ''}`}>
             {activeConversation ? (
               <ChatWindow
                 conversationId={activeConversation._id}
                 conversation={activeConversation}
                 myId={userData?.id}
                 onActivity={loadConversations}
+                onBack={!isMdUp ? () => setMobileView('list') : undefined}
               />
             ) : (
               <div className="p-6 text-gray-600">Select a conversation or create a new one.</div>

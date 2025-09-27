@@ -84,7 +84,7 @@ const Aigenerator = () => {
   return (
     <div>
       <Navbar />
-      <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen flex flex-col items-center justify-center px-6 py-10">
+  <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-10">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-primary-dark mb-4 text-center tracking-wide">
             Let's Create Your Notes
@@ -94,7 +94,7 @@ const Aigenerator = () => {
           </p>
         </div>
 
-        <div className="bg-gradient-to-r from-background to-secondary-light shadow-2xl rounded-xl p-10 w-full max-w-3xl">
+  <div className="bg-gradient-to-r from-background to-secondary-light shadow-2xl rounded-xl p-6 sm:p-8 md:p-10 w-full max-w-3xl">
           <h1 className="text-2xl font-bold text-primary-dark mb-10 text-center tracking-normal">
             Enter Details to Generate Notes 
             <span> <AutoFixHigh className="text-primary-dark mb-2 ml-1" /></span>
@@ -182,7 +182,7 @@ const Aigenerator = () => {
             </button>}
 
           {notes && (
-            <div className="mt-10 shadow-md shadow-current p-6 rounded-lg">
+            <div className="mt-8 sm:mt-10 shadow-md shadow-current p-4 sm:p-6 rounded-lg">
               <h2 className="text-xl font-semibold mb-4">Here is your Notes On:</h2>
               <h3 className="text-3xl font-extrabold mb-4 flex justify-center text-primary">{topic.toUpperCase()} : {context}</h3>
 
@@ -190,7 +190,7 @@ const Aigenerator = () => {
 
               <div  id="notes-container"
                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(notes) }}
-                style={{ padding: "20px", border: "1px solid #ddd", overflowY: "auto", maxHeight: "500px" }}
+                style={{ padding: "16px", border: "1px solid #ddd", overflowY: "auto", maxHeight: "60vh" }}
               />
                <div className="mt-6 flex justify-center gap-4">
                 <button onClick={downloadAsPDF} className="bg-secondary-dark flex text-primary px-6 py-2 rounded-lg">

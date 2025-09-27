@@ -57,9 +57,9 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-r from-background to-secondary-light">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
         {/* Hero */}
-        <div className="rounded-2xl bg-white/90 shadow-lg shadow-current p-8 md:p-10 mb-10">
+        <div className="rounded-2xl bg-white/90 shadow-lg shadow-current p-6 md:p-10 mb-8 md:mb-10">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-primary-dark tracking-tight">
@@ -69,7 +69,7 @@ const Dashboard = () => {
                 Everything you need to learn faster and together—notes, AI, community, and chat.
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <Link to="/chat" className="inline-flex items-center gap-2 px-4 py-2 rounded-md border hover:bg-gray-50">
                 <FaBolt className="text-primary" /> Quick Chat
               </Link>
@@ -84,7 +84,7 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <div className="rounded-xl bg-white/90 border border-gray-100 p-5">
             <div className="text-sm text-gray-600">Unread messages</div>
             <div className="mt-1 text-2xl font-bold text-primary-dark">{unreadTotal}</div>
@@ -105,7 +105,7 @@ const Dashboard = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {features.map((f, i) => (
             <Link
               to={f.link}
