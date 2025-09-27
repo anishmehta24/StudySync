@@ -5,6 +5,7 @@ import authRouter from "./routes/authRoutes.js"
 import userRouter from "./routes/userRoutes.js"
 import notesRouter from "./routes/notesRoutes.js"
 import postRouter from "./routes/postRoutes.js"
+import chatRouter from "./routes/chatRoutes.js"
 
 
 const app = express()
@@ -34,7 +35,7 @@ app.use(express.urlencoded({extended:true,limit:"16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
-// API ENDPOINTS
+// // API ENDPOINTS
 app.get("/",(req,res)=>
     res.send("Api working")
 )
@@ -42,5 +43,6 @@ app.use('/api/auth',authRouter);
 app.use('/api/user',userRouter);
 app.use('/api/notes',notesRouter);
 app.use('/api/post',postRouter);
+app.use('/api/chat',chatRouter);
 
 export {app}

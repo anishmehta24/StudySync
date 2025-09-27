@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../Navbar';
-import SearchIcon from '@mui/icons-material/Search';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import EventIcon from '@mui/icons-material/Event';
-import ForumIcon from '@mui/icons-material/Forum';
+import { AddCircleRounded, Search } from '@mui/icons-material';
 import GroupIcon from '@mui/icons-material/Group';
 import SchoolIcon from '@mui/icons-material/School';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ChatIcon from '@mui/icons-material/Chat';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import { AddCircleRounded, Search, SearchOff, SearchOffRounded, SearchOutlined, SearchRounded } from '@mui/icons-material';
 
 const Group = () => {
   const [search, setSearch] = useState('');
 
   const handleSearch = () => {
-    console.log("Searching for study groups:", search);
+    console.log('Searching for study groups:', search);
   };
 
   const redirectToCommunityForm = () => {
@@ -23,7 +20,7 @@ const Group = () => {
   };
 
   const redirectToChatPage = () => {
-    window.location.href = '/'; //add in future
+    window.location.href = '/chat';
   };
 
   const redirectToNoticeBoard = () => {
@@ -44,42 +41,35 @@ const Group = () => {
           </h3>
           <hr className="border-t-2 border-primary-dark w-1/2 mx-auto my-4" />
           <br />
-          <div className="flex flex-wrap items-center justify-around gap-4">
-            <img
-                src="/group4.png"
-                alt="Study Illustration 1"
-                className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover"
-            />
-            <img
-                src="/group3.png"
-                alt="Study Illustration 2"
-                className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover"
-            />
-            <img
-                src="/group5.png"
-                alt="Study Illustration 3"
-                className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover"
-            />
-        </div>
+      <div className="flex flex-wrap items-center justify-around gap-4">
+      <img src="/group4.png" alt="Study Illustration 1" className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover" />
+      <img src="/group3.png" alt="Study Illustration 2" className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover" />
+      <img src="/group5.png" alt="Study Illustration 3" className="rounded-lg shadow-lg shadow-current w-full sm:w-80 h-60 object-cover" />
+      </div>
 
         </div>
 
         {/* Search Study Groups Section */}
         <div className="w-full mb-8 p-6 max-w-7xl bg-gradient-to-r from-background to-secondary-light rounded-xl shadow-lg shadow-current space-y-6">
-          <div className="flex items-center space-x-4">
-            <input
-              type="text"
-              placeholder="Search Study Groups"
-              className="w-full p-3 border rounded-md"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <button
-              className="p-3 bg-primary-dark text-white rounded-md hover:bg-primary-light transition"
-              onClick={handleSearch}
-            >
-              <Search />
-            </button>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4 flex-1">
+              <input
+                type="text"
+                placeholder="Search Study Groups"
+                className="w-full p-3 border rounded-md"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <button
+                className="p-3 bg-primary-dark text-white rounded-md hover:bg-primary-light transition"
+                onClick={handleSearch}
+              >
+                <Search />
+              </button>
+            </div>
+            <div className="ml-4">
+              <Link to="/chat" className="px-4 py-2 border rounded-md hover:bg-gray-50">Open Chat</Link>
+            </div>
           </div>
 
           <div className="flex flex-wrap gap-4 items-center justify-center">
@@ -98,9 +88,7 @@ const Group = () => {
           </div>
 
           <div className="text-center flex items-center justify-center">
-            <button
-              className="bg-primary-dark text-white font-bold mt-3 py-3 px-6 rounded-lg shadow-md transform hover:scale-105 transition duration-300 flex items-center gap-2"
-            >
+            <button className="bg-primary-dark text-white font-bold mt-3 py-3 px-6 rounded-lg shadow-md transform hover:scale-105 transition duration-300 flex items-center gap-2">
               <AddCircleRounded /> Create Study Group
             </button>
           </div>
@@ -132,9 +120,7 @@ const Group = () => {
 
           {/* Right Section */}
           <div className="w-full lg:w-1/4 shadow-lg shadow-current p-6 space-y-6 border rounded-lg">
-            <h2 className="text-xl font-bold text-primary-dark mb-4">
-              📘 Study Tips
-            </h2>
+            <h2 className="text-xl font-bold text-primary-dark mb-4">📘 Study Tips</h2>
             <ul className="list-disc ml-6 text-gray-700">
               <li>Break your study sessions into focused intervals.</li>
               <li>Use group discussions to tackle challenging topics.</li>
@@ -143,39 +129,24 @@ const Group = () => {
 
             <div className="p-4 bg-blue-50 rounded-lg shadow-inner">
               <h3 className="text-lg font-bold text-blue-600">Have a question?</h3>
-              <p className="text-gray-700 mt-2">
-                Don't hesitate! Click the button below to ask your doubts in the community forum.
-              </p>
-              <button
-                className="bg-blue-600 text-white px-4 py-2 rounded-md mt-4 flex items-center gap-2"
-                onClick={redirectToCommunityForm}
-              >
+              <p className="text-gray-700 mt-2">Don't hesitate! Click the button below to ask your doubts in the community forum.</p>
+              <button className="bg-blue-600 text-white px-4 py-2 rounded-md mt-4 flex items-center gap-2" onClick={redirectToCommunityForm}>
                 <HelpOutlineIcon /> Ask the Community
               </button>
             </div>
 
             <div className="p-4 bg-gray-50 rounded-lg shadow-inner">
               <h3 className="text-lg font-bold text-green-600">💬 Let's Chat!</h3>
-              <p className="text-gray-700 mt-2">
-                Feeling stuck or need a pep talk? <strong>Click here</strong> to jump into a lively chatroom and share your thoughts!
-              </p>
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded-md mt-4 flex items-center gap-2"
-                onClick={redirectToChatPage}
-              >
+              <p className="text-gray-700 mt-2">Feeling stuck or need a pep talk? <strong>Click here</strong> to jump into a lively chatroom and share your thoughts!</p>
+              <button className="bg-green-500 text-white px-4 py-2 rounded-md mt-4 flex items-center gap-2" onClick={redirectToChatPage}>
                 <ChatIcon /> Join the Chat
               </button>
             </div>
 
             <div className="p-4 bg-yellow-50 rounded-lg shadow-inner">
               <h3 className="text-lg font-bold text-orange-600">📜 Notice Board</h3>
-              <p className="text-gray-700 mt-2">
-                Stay informed! Check out the <strong>Digital Notice Board</strong> for the latest updates and announcements.
-              </p>
-              <button
-                className="bg-orange-500 text-white px-4 py-2 rounded-md mt-4 flex items-center gap-2"
-                onClick={redirectToNoticeBoard}
-              >
+              <p className="text-gray-700 mt-2">Stay informed! Check out the <strong>Digital Notice Board</strong> for the latest updates and announcements.</p>
+              <button className="bg-orange-500 text-white px-4 py-2 rounded-md mt-4 flex items-center gap-2" onClick={redirectToNoticeBoard}>
                 <NotificationsActiveIcon /> View Notices
               </button>
             </div>

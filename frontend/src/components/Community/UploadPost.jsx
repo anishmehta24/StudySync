@@ -51,8 +51,8 @@ const UploadPost = () => {
   return (
     <div>
       <Navbar />
-      <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen flex justify-center items-center p-6">
-        <div className="w-full max-w-md bg-gradient-to-r from-background to-secondary-light rounded-lg shadow-lg shadow-current p-6">
+      <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen flex justify-center items-center p-4 sm:p-6">
+        <div className="w-full max-w-md bg-gradient-to-r from-background to-secondary-light rounded-lg shadow-lg shadow-current p-5 sm:p-6">
           <h2 className="text-2xl font-bold text-primary-dark mb-4 text-center tracking-normal">
             Create a Post <AddCircle className='mb-1' />
           </h2>

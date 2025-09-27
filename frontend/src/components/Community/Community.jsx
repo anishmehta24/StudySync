@@ -65,7 +65,7 @@ const Community = () => {
   return (
     <div>
       <Navbar />
-      <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen py-6 px-4 sm:px-10 lg:px-28">
+  <div className="bg-gradient-to-r from-background to-secondary-light min-h-screen py-6 px-4 sm:px-8 lg:px-16">
         {/* Header Section */}
         <div className="text-center mb-6 mt-10">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary-dark mb-4 tracking-wide">
@@ -77,7 +77,7 @@ const Community = () => {
         </div>
 
         {/* Search and New Post */}
-        <div className="flex flex-col items-center md:flex-row md:justify-center space-y-4 md:space-y-0 md:space-x-4 mb-6">
+        <div className="flex flex-col items-stretch md:flex-row md:justify-center gap-3 md:gap-4 mb-6">
           <div className="relative w-full md:w-1/2">
             <FaSearch className="absolute left-4 top-4 text-gray-400" />
             <input
@@ -99,7 +99,7 @@ const Community = () => {
         {filteredPosts.map((post) => (
           <div
             key={post._id}
-            className="bg-gradient-to-r from-background to-secondary-light p-5 rounded-lg shadow-md shadow-current hover:shadow-lg hover:shadow-current mb-5 mx-4 sm:mx-8 border border-secondary cursor-pointer"
+            className="bg-gradient-to-r from-background to-secondary-light p-5 rounded-lg shadow-md shadow-current hover:shadow-lg hover:shadow-current mb-5 mx-0 sm:mx-4 border border-secondary cursor-pointer"
           >
             <div className="flex flex-col sm:flex-row justify-between items-start">
               <div>

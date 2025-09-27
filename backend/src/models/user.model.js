@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required:true,
     },
+    // Avatar fields
+    avatarUrl: { type: String, default: '' },
+    avatarPublicId: { type: String, default: '' },
+
     verifyOtp:{
         type:String,
         default: ''
@@ -34,7 +38,7 @@ const userSchema = new mongoose.Schema({
         type:Number,
         default: 0
     },
-})
+}, { timestamps: true })
 
 const userModel = mongoose.models?.user || mongoose.model('user',userSchema)
 
