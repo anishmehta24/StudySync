@@ -17,20 +17,41 @@ connectDB()
     .then(() => {
         const server = http.createServer(app);
 
-        const allowedOrigins = [
+        const rawAllowed = [
             process.env.CORS_ORIGIN_1,
             process.env.CORS_ORIGIN_2,
             process.env.CORS_ORIGIN_3,
         ].filter(Boolean);
 
+        const normalizeOrigin = (o) => {
+            try {
+                if (!o) return '';
+                const u = new URL(o);
+                return u.origin; // strips path / trailing slash
+            } catch { return o; }
+        };
+
+        const allowedOrigins = rawAllowed.map(normalizeOrigin);
+        if (allowedOrigins.length === 0) {
+            console.warn('[Socket.IO] No CORS_ORIGIN_* env vars set. All origins will be temporarily allowed (development fallback).');
+        } else {
+            console.log('[Socket.IO] Allowed origins:', allowedOrigins.join(', '));
+        }
+
         const io = new Server(server, {
             cors: {
                 origin: (origin, cb) => {
-                    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-                    return cb(new Error("Not allowed by CORS"));
+                    // Allow no origin (mobile apps, same-origin) or matching normalized origin
+                    if (!origin) return cb(null, true);
+                    const norm = normalizeOrigin(origin);
+                    if (allowedOrigins.length === 0 || allowedOrigins.includes(norm)) return cb(null, true);
+                    console.warn('[Socket.IO] CORS blocked origin:', origin, 'normalized:', norm);
+                    return cb(new Error('Not allowed by CORS'));
                 },
                 credentials: true,
+                methods: ["GET","POST","PUT","DELETE","OPTIONS"],
             },
+            transports: ["websocket", "polling"],
             path: process.env.SOCKET_PATH || "/socket.io",
         });
 
@@ -40,15 +61,27 @@ connectDB()
         io.use((socket, next) => {
             try {
                 const rawCookie = socket.request.headers.cookie || "";
-                const cookies = cookie.parse(rawCookie);
-                const token = cookies.token;
-                if (!token) return next(new Error("Unauthorized"));
+                let token = '';
+                try {
+                    const cookies = cookie.parse(rawCookie);
+                    token = cookies.token || '';
+                } catch {}
+
+                // Optional token via handshake.auth (useful if cookies blocked cross-site)
+                if (!token && socket.handshake?.auth?.token) {
+                    token = socket.handshake.auth.token;
+                }
+
+                if (!token) {
+                    return next(new Error('Unauthorized'));
+                }
                 const decoded = jwt.verify(token, process.env.JWT_SECRET);
-                if (!decoded?.id) return next(new Error("Unauthorized"));
-                socket.userId = decoded.id;
-                next();
+                const uid = decoded?.id || decoded?._id;
+                if (!uid) return next(new Error('Unauthorized'));
+                socket.userId = String(uid);
+                return next();
             } catch (err) {
-                next(err);
+                return next(err);
             }
         });
 
@@ -112,7 +145,7 @@ connectDB()
         });
 
         const PORT = process.env.PORT || 8000;
-        server.listen(PORT, () => {
+        server.listen(PORT, '0.0.0.0', () => {
             console.log(`Server is running on port ${PORT}`);
         });
     })
