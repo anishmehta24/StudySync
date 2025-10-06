@@ -1,6 +1,6 @@
-import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { toast } from 'react-toastify';
+import { httpClient } from '../api/httpClient';
 
 export const AppContext = createContext()
 
@@ -10,11 +10,9 @@ export const AppContextProvider = (props)=>{
     const [isLoggedin , setIsLoggedin] = useState(false)
     const [userData , setUserData] = useState(false)
 
-    axios.defaults.withCredentials = true;
-
     const getUserData = async()=>{
         try {
-            const {data}= await axios.get(backendUrl + '/api/user/data')
+            const {data}= await httpClient.get('/api/user/data')
             data.success ? setUserData(data.userData) : toast.error(data.message)
         } catch (error) {
             toast.error(error.message)
@@ -23,7 +21,7 @@ export const AppContextProvider = (props)=>{
 
     const getAuthState = async () =>{
         try {
-            const {data} = await axios.get(backendUrl + '/api/auth/is-auth')
+            const {data} = await httpClient.get('/api/auth/is-auth')
             if(data.success) {
                 setIsLoggedin(true)
                 getUserData()

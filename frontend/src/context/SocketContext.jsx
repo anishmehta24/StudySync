@@ -19,8 +19,17 @@ export const SocketProvider = ({ children }) => {
       return
     }
 
-    // Use relative URL so Vite proxy handles ws to backend
-    const s = io('/', { withCredentials: true, path: '/socket.io' })
+    // Derive socket URL from env (fallback to backend URL or current origin for dev).
+    const rawSocket = (import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_BACKEND_URL || window.location.origin).trim()
+    const socketUrl = rawSocket.replace(/\/$/, '') || '/'
+    // eslint-disable-next-line no-console
+    console.log('[Socket] connecting to', socketUrl)
+    const s = io(socketUrl, {
+      withCredentials: true,
+      path: '/socket.io',
+      // Explicit transports to avoid upgrade issues behind some proxies
+      transports: ['websocket', 'polling']
+    })
     socketRef.current = s
     s.on('connect', () => setConnected(true))
     s.on('disconnect', () => setConnected(false))
